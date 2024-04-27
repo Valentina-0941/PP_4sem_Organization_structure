@@ -1,1 +1,25 @@
+body{
+    margin: 0;
+}
+header{
+    background-color: #6c757d;
+}
+nav .container-fluid{
+    justify-content: flex-start !important;
+}
+root, [data-bs-theme=light] {
+    --bs-link-color: #333333 !important;
+}
+.navbar-brand{
+    padding: 5px 40px !important;
+}
+.offcanvas{
+    --bs-offcanvas-width:300px;
+}
+img{
+    background-color: #6c757d;
+}
 
+main{
+    margin: 10% 0;
+}
