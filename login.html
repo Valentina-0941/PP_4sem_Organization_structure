@@ -12,9 +12,58 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
 
-
+    <!--Css-->
+<!--    <link rel="stylesheet" type="text/css" href="css/main.css">-->
+    <style>
+        body>div{
+            width: 400px;
+            background-color: #f6f6f6;
+            box-sizing: content-box;
+        }
+        #eyeIcon {
+            width: 20px; /* Размер иконки */
+            height: 20px;
+            display: block;
+        }
+    </style>
 </head>
 <body>
+<div class="mx-auto my-5 p-5 ">
+    <h1 class="text-center">Авторизация</h1>
+    <hr>
+    <form class="row g-3" id="SignIn">
+        <div class="col-12">
+            <label for="inputEmail4" class="form-label">Эл. адрес / Логин</label>
+            <input type="text" class="form-control" id="inputEmail4">
+        </div>
+        <div class="col-12">
+            <label for="inputPassword4" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="inputPassword4">
+            <button type="button" class="btn p-1" onclick="togglePasswordVisibility()">
+                <img src="source/icon/fi-rr-eye.svg" alt="eye icon" id="eyeIcon">
+            </button>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Войти в систему</button>
+        </div>
+    </form>
+    <hr>
+    <a href="index.html" class="">Вернуться на главную страницу</a>
+</div>
+<script>
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById('inputPassword4');
+        var eyeIcon = document.getElementById('eyeIcon');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.src = 'source/icon/fi-rr-eye-crossed.svg'; // Путь к иконке "закрытый глаз"
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.src = 'source/icon/fi-rr-eye.svg'; // Путь к иконке "открытый глаз"
+        }
+    }
+</script>
 
 </body>
 </html>
