@@ -57,6 +57,8 @@
 </head>
 <body>
 <div class="d-flex">
+
+    <!--Боковая панель навигации-->
     <header>
         <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="height: 100vh;">
             <ul class="nav nav-pills nav-flush flex-column text-center mb-auto">
@@ -101,6 +103,8 @@
                 </ul>
             </div>
         </div>
+
+        <!--Боковая панель навигации | Скрипт-->
         <script>
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -108,16 +112,23 @@
             });
         </script>
     </header>
+
     <div class="w-100">
+        <!--Поиск-->
         <div class="search-box d-flex flex-wrap"></div>
+
+        <!--Сортировка по алфавиту-->
         <div class="sort btn btn-light my-3 mx-4 px-4" style="border-radius: 16px;">
             <a class="icon-link icon-link-hover" href="#">
                 <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;">
                 По алфавиту
             </a>
         </div>
+
+        <!--Список сотрудников - карточки-->
         <div class="cards d-flex row gap-3 my-4 mx-4">
-            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                 aria-controls="offcanvasExample">
                 <div class="card-img-top img-fluid"
                      style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">
                 </div>
@@ -128,20 +139,34 @@
                     </div>
                 </div>
             </div>
-            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                 aria-controls="offcanvasExample">
                 <div class="card-img-top img-fluid"
-                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">
+                     style="background: url(source/img/photo_test_2.jpg) center; background-size: cover; width:150px; height: 180px;">
                 </div>
                 <div class="card-body text-center">
                     <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>
                     <div class="card-text">
-                        <p>Должность</p>
+                        <p>Специалист</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                 aria-controls="offcanvasExample">
+                <div class="card-img-top img-fluid"
+                     style="background: url(source/img/photo_test_1.jpg) center; background-size: cover; width:150px; height: 180px;">
+                </div>
+                <div class="card-body text-center">
+                    <h6 class="card-title">Константинов Иван Леонидович</h6>
+                    <div class="card-text">
+                        <p>Ведущий инженер</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Offcanvas -->
+
+    <!--Информация о сотруднике -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasExampleLabel">Информация о сотруднике</h5>
@@ -150,6 +175,8 @@
         <div class="offcanvas-body">
         </div>
     </div>
+
+    <!--Информация о сотруднике | Скрипт-->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var cards = document.querySelectorAll('.card.p-3.btn');
@@ -174,23 +201,26 @@
                     <p id="subdivision">Подразделения:</p>
                     <p id="location">Локация:</p>
                     <p id="yurFace">Юр. лицо:</p>
-
                 `;
                 });
             });
         });
     </script>
 
-    <script>var cardTitleElement = document.querySelector('.card-title');
-    var fullName = cardTitleElement.textContent.trim();
-    var parts = fullName.split(' ');
+    <!--Список сотрудников - карточки | Скрипт-->
+    <script>
+        var cardTitleElement = document.querySelector('.card-title');
+        var fullName = cardTitleElement.textContent.trim();
+        var parts = fullName.split(' ');
 
-    if (parts.length >= 3) {
-        var lastName = parts[0];
-        var initials = parts[1] + ' ' + parts[2]; // Берем первые буквы имени и отчества
-        cardTitleElement.innerHTML = lastName + '<br>' + initials;
-    }
+        if (parts.length >= 3) {
+            var lastName = parts[0];
+            var initials = parts[1] + ' ' + parts[2]; // Берем первые буквы имени и отчества
+            cardTitleElement.innerHTML = lastName + '<br>' + initials;
+        }
     </script>
+
+    <!--Поиск - модальное окно | Скрипт-->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -240,11 +270,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-primary">Сохранить изменения</button>
+                    <button type="button" id="applyFilterBtn" class="btn btn-primary">Применить фильтр</button>
+                    <button type="button" id="clearFilterBtn" class="btn btn-secondary">Сбросить фильтр</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--Поиск - модальное окно | Скрипт-->
     <script>
         var openModalBtn = document.getElementById('openModalBtn');
         var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
@@ -254,6 +287,7 @@
     </script>
 </div>
 
+<!--Поиск | Скрипт-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var saveChangesBtn = document.querySelector('#searchModal');
@@ -320,5 +354,52 @@
     }
 
 </script>
+<!--Сортировка | Скрипт-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Находим кнопку "По алфавиту" и иконку для сортировки
+        var sortButton = document.querySelector('.sort');
+        var icon = document.getElementById('iconSort');
+
+        // Переменная для отслеживания текущего порядка сортировки (по возрастанию или убыванию)
+        var ascendingOrder = true;
+
+        // Добавляем обработчик события на клик по кнопке
+        sortButton.addEventListener('click', function () {
+            // Получаем все карточки
+            var cards = document.querySelectorAll('.cards .card');
+
+            // Преобразуем NodeList в массив для удобства работы
+            var cardsArray = Array.from(cards);
+
+            // Сортируем карточки по алфавиту по тексту внутри элемента с классом 'card-title'
+            cardsArray.sort(function (a, b) {
+                var titleA = a.querySelector('.card-title').textContent.trim().toLowerCase();
+                var titleB = b.querySelector('.card-title').textContent.trim().toLowerCase();
+                return ascendingOrder ? titleA.localeCompare(titleB) : titleB.localeCompare(titleA);
+            });
+
+            // Очищаем контейнер карточек
+            var cardContainer = document.querySelector('.cards');
+            cardContainer.innerHTML = '';
+
+            // Вставляем отсортированные карточки обратно в контейнер
+            cardsArray.forEach(function (card) {
+                cardContainer.appendChild(card);
+            });
+
+            // Инвертируем переменную для отслеживания текущего порядка сортировки
+            ascendingOrder = !ascendingOrder;
+
+            // Инвертируем иконку сортировки
+            if (ascendingOrder) {
+                icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-down.svg');
+            } else {
+                icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-up.svg');
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
