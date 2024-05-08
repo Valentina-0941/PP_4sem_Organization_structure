@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Профиль</title>
+    <title>Структура организации</title>
 
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -11,6 +11,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
+
+    <!--    <script src="js/d3.v7.js"></script>-->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+
     <style>
         header {
             width: 55px;
@@ -20,63 +25,104 @@
             width: 24px;
         }
 
-        .profil * {
-            padding: 0;
+        .card p {
+            margin-bottom: 0;
+            font-size: 0.8rem;
+        }
+
+        .card {
+            width: 190px;
+            align-items: center;
         }
 
     </style>
 
 </head>
 <body>
-<header>
-    <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary">
-        <!--        <a href="/" class="d-block p-3 link-body-emphasis text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">-->
-        <!--            <svg class="bi pe-none" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>-->
-        <!--            <span class="visually-hidden">Icon-only</span>-->
-        <!--        </a>-->
-        <ul class="nav nav-pills nav-flush flex-column text-center">
-            <li>
-                <a href="index.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                   data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Главная страница">
-                    <img class="icon" src="source/icon/fi-rr-home.svg" alt="home icon">
-                </a>
-            </li>
-            <li>
-                <a href="structure.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                   data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Структура организации">
-                    <img class="icon" src="source/icon/fi-rr-stats.svg" alt="stats icon">
-                </a>
-            </li>
-            <li>
-                <a href="help.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                   data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Помощь">
-                    <img class="icon" src="source/icon/fi-rr-question-square.svg" alt="question icon">
-                </a>
-            </li>
-        </ul>
-        <div class="dropdown border-top">
-            <a href="#"
-               class="d-flex align-items-center justify-content-center py-3 link-body-emphasis text-decoration-none dropdown-toggle"
-               data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="" alt="" width="24" height="24" class="rounded-circle">
-            </a>
-            <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item" href="account.html">Профиль</a></li>
-                <li><a class="dropdown-item" href="settings.html">Настройки</a></li>
+<div class="d-flex">
+    <header>
+        <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="height: 100vh;">
+            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto">
                 <li>
-                    <hr class="dropdown-divider">
+                    <a href="index.html" class="nav-link py-3" data-bs-toggle="tooltip"
+                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Главная страница">
+                        <img class="icon" src="source/icon/fi-rr-home.svg" alt="home icon">
+                    </a>
                 </li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
+                <li>
+                    <a href="#" class="nav-link py-3" id="openModalBtn" data-bs-toggle="tooltip"
+                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Поиск">
+                        <img class="icon" src="source/icon/fi-rr-search.svg" alt="search icon">
+                    </a>
+                </li>
+                <li>
+                    <a href="structure.html" class="nav-link py-3" data-bs-toggle="tooltip"
+                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Структура организации">
+                        <img class="icon" src="source/icon/fi-rr-stats.svg" alt="stats icon">
+                    </a>
+                </li>
+                <li>
+                    <a href="help.html" class="nav-link py-3" data-bs-toggle="tooltip"
+                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Помощь">
+                        <img class="icon" src="source/icon/fi-rr-question-square.svg" alt="question icon">
+                    </a>
+                </li>
             </ul>
+            <div class="dropdown border-top">
+                <a href="#"
+                   class="d-flex align-items-center justify-content-center py-3 link-body-emphasis text-decoration-none dropdown-toggle"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="" alt="" width="24" height="24" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small shadow">
+                    <li><a class="dropdown-item" href="account.html">Профиль</a></li>
+                    <li><a class="dropdown-item" href="settings.html">Настройки</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        </script>
+    </header>
+    <div class="w-100">
+        <div class="cards d-flex row gap-3 my-4 mx-4">
+            <div class="card p-3 btn">
+                <img src="http://via.placeholder.com/120x150" class="card-img-top" alt="...">
+                <div class="card-body text-center">
+                    <h6 class="card-title">Иванов Иван Иванович</h6>
+                    <div class="card-text">
+                        <p>Должность</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3 btn">
+                <div class="bg-black" style="width: 120px; height: 150px; border-radius: 12px;"></div>
+                <div class="card-body text-center">
+                    <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>
+                    <div class="card-text">
+                        <p>Должность</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-    </script>
-</header>
+    <script>var cardTitleElement = document.querySelector('.card-title');
+    var fullName = cardTitleElement.textContent.trim();
+    var parts = fullName.split(' ');
 
+    if (parts.length >= 3) {
+        var lastName = parts[0];
+        var initials = parts[1] + ' ' + parts[2]; // Берем первые буквы имени и отчества
+        cardTitleElement.innerHTML = lastName + '<br>' + initials;
+    }
+    </script>
+</div>
 </body>
 </html>
