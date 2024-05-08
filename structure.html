@@ -12,7 +12,6 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
 
-    <!--    <script src="js/d3.v7.js"></script>-->
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 
@@ -25,6 +24,19 @@
             width: 24px;
         }
 
+        .profil * {
+            padding: 0;
+        }
+
+        .search-box {
+            height: min-content;
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+
+        .search-box div {
+            white-space: nowrap;
+        }
+
         .card p {
             margin-bottom: 0;
             font-size: 0.8rem;
@@ -35,6 +47,11 @@
             align-items: center;
         }
 
+        /*.view_structure {*/
+        /*    position: fixed;*/
+        /*    right: 0;*/
+        /*    background-color: rgba(0, 0, 0, 0.25); !* Полупрозрачный фон *!*/
+        /*}*/
     </style>
 
 </head>
@@ -92,9 +109,18 @@
         </script>
     </header>
     <div class="w-100">
+        <div class="search-box d-flex flex-wrap"></div>
+        <div class="sort btn btn-light my-3 mx-4 px-4" style="border-radius: 16px;">
+            <a class="icon-link icon-link-hover" href="#">
+                <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;">
+                По алфавиту
+            </a>
+        </div>
         <div class="cards d-flex row gap-3 my-4 mx-4">
-            <div class="card p-3 btn">
-                <img src="http://via.placeholder.com/120x150" class="card-img-top" alt="...">
+            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                <div class="card-img-top img-fluid"
+                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">
+                </div>
                 <div class="card-body text-center">
                     <h6 class="card-title">Иванов Иван Иванович</h6>
                     <div class="card-text">
@@ -102,8 +128,10 @@
                     </div>
                 </div>
             </div>
-            <div class="card p-3 btn">
-                <div class="bg-black" style="width: 120px; height: 150px; border-radius: 12px;"></div>
+            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                <div class="card-img-top img-fluid"
+                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">
+                </div>
                 <div class="card-body text-center">
                     <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>
                     <div class="card-text">
@@ -113,6 +141,46 @@
             </div>
         </div>
     </div>
+    <!-- Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Информация о сотруднике</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var cards = document.querySelectorAll('.card.p-3.btn');
+
+            cards.forEach(function (card) {
+                card.addEventListener('click', function () {
+                    // Получаем информацию из выбранной карточки
+                    var cardTitle = card.querySelector('.card-title').textContent.trim();
+                    var cardText = card.querySelector('.card-text').textContent.trim();
+
+                    // Получаем элемент offcanvas-body
+                    var offcanvasBody = document.querySelector('.offcanvas-body');
+
+                    // Заполняем offcanvas-body информацией из карточки
+                    offcanvasBody.innerHTML = `
+                    <h5 id="name">${cardTitle}</h5>
+                    <p id="numberPos">Номер позиции:</p>
+                    <p id="jobTitle">Должность: ${cardText}</p>
+                    <p id="jobType">Тип работы:</p>
+                    <p id="group">Группа:</p>
+                    <p id="departament">Отдел:</p>
+                    <p id="subdivision">Подразделения:</p>
+                    <p id="location">Локация:</p>
+                    <p id="yurFace">Юр. лицо:</p>
+
+                `;
+                });
+            });
+        });
+    </script>
+
     <script>var cardTitleElement = document.querySelector('.card-title');
     var fullName = cardTitleElement.textContent.trim();
     var parts = fullName.split(' ');
@@ -123,6 +191,134 @@
         cardTitleElement.innerHTML = lastName + '<br>' + initials;
     }
     </script>
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Поиск</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="row row-cols-3" id="Search">
+                        <div class="col">
+                            <label for="inputNumberPos" class="form-label">Номер позиции</label>
+                            <input type="text" class="form-control" id="inputNumberPos">
+                        </div>
+                        <div class="col">
+                            <label for="inputYurFace" class="form-label">Юр. лицо</label>
+                            <input type="text" class="form-control" id="inputYurFace">
+                        </div>
+                        <div class="col">
+                            <label for="inputLocation" class="form-label">Локация</label>
+                            <input type="text" class="form-control" id="inputLocation">
+                        </div>
+                        <div class="col">
+                            <label for="inputSubdivision" class="form-label">Подразделение</label>
+                            <input type="text" class="form-control" id="inputSubdivision">
+                        </div>
+                        <div class="col">
+                            <label for="inputDepartament" class="form-label">Отдел</label>
+                            <input type="text" class="form-control" id="inputDepartament">
+                        </div>
+                        <div class="col">
+                            <label for="inputGroup" class="form-label">Группа</label>
+                            <input type="text" class="form-control" id="inputGroup">
+                        </div>
+                        <div class="col">
+                            <label for="inputJobTitle" class="form-label">Должность</label>
+                            <input type="text" class="form-control" id="inputJobTitle">
+                        </div>
+                        <div class="col">
+                            <label for="inputName" class="form-label">ФИО</label>
+                            <input type="text" class="form-control" id="inputName">
+                        </div>
+                        <div class="col">
+                            <label for="inputJobType" class="form-label">Тип работы</label>
+                            <input type="text" class="form-control" id="inputJobType">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var openModalBtn = document.getElementById('openModalBtn');
+        var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
+        openModalBtn.addEventListener('click', function () {
+            searchModal.show();
+        });
+    </script>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var saveChangesBtn = document.querySelector('#searchModal');
+
+        saveChangesBtn.addEventListener('click', function () {
+            var inputNumberPos = document.getElementById('inputNumberPos').value.trim();
+            var inputYurFace = document.getElementById('inputYurFace').value.trim();
+            var inputLocation = document.getElementById('inputLocation').value.trim();
+            var inputSubdivision = document.getElementById('inputSubdivision').value.trim();
+            var inputDepartament = document.getElementById('inputDepartament').value.trim();
+            var inputGroup = document.getElementById('inputGroup').value.trim();
+            var inputJobTitle = document.getElementById('inputJobTitle').value.trim();
+            var inputName = document.getElementById('inputName').value.trim();
+            var inputJobType = document.getElementById('inputJobType').value.trim();
+
+            var filterBox = document.querySelector('.search-box');
+            filterBox.innerHTML = '';
+
+            if (inputNumberPos !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputNumberPos')">Номер позиции: ${inputNumberPos}</span></div>`;
+            }
+            if (inputYurFace !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputYurFace')">Юр. лицо: ${inputYurFace}</span></div>`;
+            }
+            if (inputLocation !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputLocation')">Локация: ${inputLocation}</span></div>`;
+            }
+            if (inputSubdivision !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputSubdivision')">Подразделение: ${inputSubdivision}</span></div>`;
+            }
+            if (inputDepartament !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputDepartament')">Отдел: ${inputDepartament}</span></div>`;
+            }
+            if (inputGroup !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputGroup')">Группа: ${inputGroup}</span></div>`;
+            }
+            if (inputJobTitle !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputJobTitle')">Должность: ${inputJobTitle}</span></div>`;
+            }
+            if (inputName !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputName')">ФИО: ${inputName}</span></div>`;
+            }
+            if (inputJobType !== '') {
+                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
+            <span onclick="removeFilterItem(this, 'inputJobType')">Тип работы: ${inputJobType}</span></div>`;
+            }
+        });
+    });
+
+    function removeFilterItem(element, inputId) {
+        // Удаляем элемент из filter-box
+        element.parentNode.remove();
+
+        // Очищаем значение поля в модальном окне
+        document.getElementById(inputId).value = '';
+    }
+
+</script>
 </body>
 </html>
