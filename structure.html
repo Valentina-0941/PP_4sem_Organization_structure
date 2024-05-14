@@ -57,7 +57,6 @@
 </head>
 <body>
 <div class="d-flex">
-
     <!--Боковая панель навигации-->
     <header>
         <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="height: 100vh;">
@@ -115,7 +114,7 @@
 
     <div class="w-100">
         <!--Поиск-->
-        <div class="search-box d-flex flex-wrap"></div>
+        <div class="filter-box d-flex flex-wrap"></div>
 
         <!--Сортировка по алфавиту-->
         <div class="sort btn btn-light my-3 mx-4 px-4" style="border-radius: 16px;">
@@ -290,9 +289,12 @@
 <!--Поиск | Скрипт-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var saveChangesBtn = document.querySelector('#searchModal');
+        var applyFilterBtn = document.querySelector('#applyFilterBtn');
+        var clearFilterBtn = document.querySelector('#clearFilterBtn');
+        var closeModalBtn = document.querySelector('[data-bs-dismiss="modal"]');
+        var filterBox = document.querySelector('.filter-box');
 
-        saveChangesBtn.addEventListener('click', function () {
+        applyFilterBtn.addEventListener('click', function () {
             var inputNumberPos = document.getElementById('inputNumberPos').value.trim();
             var inputYurFace = document.getElementById('inputYurFace').value.trim();
             var inputLocation = document.getElementById('inputLocation').value.trim();
@@ -300,11 +302,10 @@
             var inputDepartament = document.getElementById('inputDepartament').value.trim();
             var inputGroup = document.getElementById('inputGroup').value.trim();
             var inputJobTitle = document.getElementById('inputJobTitle').value.trim();
-            var inputName = document.getElementById('inputName').value.trim();
+            var inputName = document.getElementById('inputName').value.trim().toLowerCase(); // Добавлено
             var inputJobType = document.getElementById('inputJobType').value.trim();
 
-            var filterBox = document.querySelector('.search-box');
-            filterBox.innerHTML = '';
+            filterBox.innerHTML = ''; // Очищаем содержимое filter-box перед добавлением новых элементов
 
             if (inputNumberPos !== '') {
                 filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
@@ -342,18 +343,52 @@
                 filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
             <span onclick="removeFilterItem(this, 'inputJobType')">Тип работы: ${inputJobType}</span></div>`;
             }
+
+            var inputName = document.getElementById('inputName').value.trim().toLowerCase();
+            var cards = document.querySelectorAll('.card');
+
+            cards.forEach(function (card) {
+                var cardName = card.querySelector('.card-title').innerText.trim().toLowerCase();
+                if (inputName !== '' && !cardName.includes(inputName)) {
+                    card.style.display = 'none';
+                } else {
+                    card.style.display = 'block';
+                }
+            });
+
         });
+
+        clearFilterBtn.addEventListener('click', function () {
+            var filterInputs = document.querySelectorAll('.form-control');
+            filterInputs.forEach(function (input) {
+                input.value = '';
+            });
+
+            var cards = document.querySelectorAll('.card');
+            cards.forEach(function (card) {
+                card.style.display = 'block';
+            });
+            closeModalBtn();
+        });
+
+        closeModalBtn.addEventListener('click', function () {
+            var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
+            searchModal.hide();
+        });
+
     });
 
+    <!-- Удалить элемент в filter-box -->
     function removeFilterItem(element, inputId) {
-        // Удаляем элемент из filter-box
         element.parentNode.remove();
-
-        // Очищаем значение поля в модальном окне
         document.getElementById(inputId).value = '';
+
+        // После удаления элемента из filter-box, вызываем функцию, обновляющую фильтр
+        applyFilterBtn.click();
     }
 
 </script>
+
 <!--Сортировка | Скрипт-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
