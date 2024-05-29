@@ -123,46 +123,47 @@
                 По алфавиту
             </a>
         </div>
-
-        <!--Список сотрудников - карточки-->
-        <div class="cards d-flex row gap-3 my-4 mx-4">
-            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-                 aria-controls="offcanvasExample">
-                <div class="card-img-top img-fluid"
-                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">
-                </div>
-                <div class="card-body text-center">
-                    <h6 class="card-title">Иванов Иван Иванович</h6>
-                    <div class="card-text">
-                        <p>Должность</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-                 aria-controls="offcanvasExample">
-                <div class="card-img-top img-fluid"
-                     style="background: url(source/img/photo_test_2.jpg) center; background-size: cover; width:150px; height: 180px;">
-                </div>
-                <div class="card-body text-center">
-                    <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>
-                    <div class="card-text">
-                        <p>Специалист</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
-                 aria-controls="offcanvasExample">
-                <div class="card-img-top img-fluid"
-                     style="background: url(source/img/photo_test_1.jpg) center; background-size: cover; width:150px; height: 180px;">
-                </div>
-                <div class="card-body text-center">
-                    <h6 class="card-title">Константинов Иван Леонидович</h6>
-                    <div class="card-text">
-                        <p>Ведущий инженер</p>
-                    </div>
-                </div>
-            </div>
+        <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards">
         </div>
+        <!--Список сотрудников - карточки-->
+<!--        <div class="cards d-flex row gap-3 my-4 mx-4">-->
+<!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
+<!--                 aria-controls="offcanvasExample">-->
+<!--                <div class="card-img-top img-fluid"-->
+<!--                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">-->
+<!--                </div>-->
+<!--                <div class="card-body text-center">-->
+<!--                    <h6 class="card-title">Иванов Иван Иванович</h6>-->
+<!--                    <div class="card-text">-->
+<!--                        <p>Должность</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
+<!--                 aria-controls="offcanvasExample">-->
+<!--                <div class="card-img-top img-fluid"-->
+<!--                     style="background: url(source/img/photo_test_2.jpg) center; background-size: cover; width:150px; height: 180px;">-->
+<!--                </div>-->
+<!--                <div class="card-body text-center">-->
+<!--                    <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>-->
+<!--                    <div class="card-text">-->
+<!--                        <p>Специалист</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
+<!--                 aria-controls="offcanvasExample">-->
+<!--                <div class="card-img-top img-fluid"-->
+<!--                     style="background: url(source/img/photo_test_1.jpg) center; background-size: cover; width:150px; height: 180px;">-->
+<!--                </div>-->
+<!--                <div class="card-body text-center">-->
+<!--                    <h6 class="card-title">Константинов Иван Леонидович</h6>-->
+<!--                    <div class="card-text">-->
+<!--                        <p>Ведущий инженер</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 
     <!--Информация о сотруднике -->
@@ -178,46 +179,88 @@
     <!--Информация о сотруднике | Скрипт-->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var cards = document.querySelectorAll('.card.p-3.btn');
+            // Загружаем данные о сотрудниках из json файла
+            fetch('/data.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при загрузке данных о сотрудниках');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const cardsContainer = document.querySelector('#employeeCards');
+                    // Очищаем контейнер с карточками перед добавлением новых
+                    cardsContainer.innerHTML = '';
 
-            cards.forEach(function (card) {
-                card.addEventListener('click', function () {
-                    // Получаем информацию из выбранной карточки
-                    var cardTitle = card.querySelector('.card-title').textContent.trim();
-                    var cardText = card.querySelector('.card-text').textContent.trim();
+                    // Перебираем каждого сотрудника
+                    data.forEach(employee => {
+                        // Создаем элемент карточки
+                        const card = document.createElement('div');
+                        card.classList.add('card', 'p-3', 'btn');
+                        card.setAttribute('data-bs-toggle', 'offcanvas');
+                        card.setAttribute('data-bs-target', '#offcanvasExample');
+                        card.setAttribute('aria-controls', 'offcanvasExample');
 
-                    // Получаем элемент offcanvas-body
-                    var offcanvasBody = document.querySelector('.offcanvas-body');
+                        // Добавляем атрибуты данных с информацией о сотруднике
+                        Object.entries(employee).forEach(([key, value]) => {
+                            card.setAttribute(`data-${key}`, value);
+                        });
 
-                    // Заполняем offcanvas-body информацией из карточки
-                    offcanvasBody.innerHTML = `
-                    <h5 id="name">${cardTitle}</h5>
-                    <p id="numberPos">Номер позиции:</p>
-                    <p id="jobTitle">Должность: ${cardText}</p>
-                    <p id="jobType">Тип работы:</p>
-                    <p id="group">Группа:</p>
-                    <p id="departament">Отдел:</p>
-                    <p id="subdivision">Подразделения:</p>
-                    <p id="location">Локация:</p>
-                    <p id="yurFace">Юр. лицо:</p>
-                `;
+                        // Создаем содержимое карточки (только ФИО и должность)
+                        const cardContent = `
+                        <div class="card-img-top img-fluid" style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;"></div>
+                        <div class="card-body text-center">
+                            <h6 class="card-title">${employee['ФИО']}</h6>
+                            <div class="card-text">
+                                <p>${employee['Должность']}</p>
+                            </div>
+                        </div>
+                    `;
+
+                        // Добавляем содержимое карточки в элемент карточки
+                        card.innerHTML = cardContent;
+
+                        // Добавляем карточку в контейнер
+                        cardsContainer.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке данных о сотрудниках:', error);
                 });
+
+            // Обработчик клика на карточке
+            document.addEventListener('click', function (event) {
+                var target = event.target.closest('.card');
+                if (!target) return;
+
+                var fullName = target.dataset['ФИО'];
+                var jobPosition = target.dataset['Должность'];
+                var employeeInfo = `
+                <h5 id="name">${fullName}</h5>
+                <p id="jobTitle">${jobPosition}</p>
+                <p id="numberPos">Номер позиции: ${target.dataset['Номер_позиции']}</p>
+                <p id="jobType">Тип работы: ${target.dataset['Тип_работы']}</p>
+                <p id="group">Группа: ${target.dataset['Группа']}</p>
+                <p id="departament">Отдел: ${target.dataset['Отдел']}</p>
+                <p id="subdivision">Подразделение: ${target.dataset['Подразделение']}</p>
+                <p id="location">Локация: ${target.dataset['Локация']}</p>
+                <p id="yurFace">Юр. лицо: ${target.dataset['ЮЛ']}</p>
+            `;
+
+                // Получаем элемент offcanvas-body
+                var offcanvasBody = document.querySelector('.offcanvas-body');
+
+                // Очищаем содержимое offcanvas-body
+                offcanvasBody.innerHTML = '';
+
+                // Отображаем информацию о сотруднике в offcanvas
+                offcanvasBody.innerHTML = employeeInfo;
             });
         });
     </script>
 
-    <!--Список сотрудников - карточки | Скрипт-->
-    <script>
-        var cardTitleElement = document.querySelector('.card-title');
-        var fullName = cardTitleElement.textContent.trim();
-        var parts = fullName.split(' ');
 
-        if (parts.length >= 3) {
-            var lastName = parts[0];
-            var initials = parts[1] + ' ' + parts[2]; // Берем первые буквы имени и отчества
-            cardTitleElement.innerHTML = lastName + '<br>' + initials;
-        }
-    </script>
+
 
     <!--Поиск - модальное окно | Скрипт-->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -299,7 +342,7 @@
             var inputYurFace = document.getElementById('inputYurFace').value.trim();
             var inputLocation = document.getElementById('inputLocation').value.trim();
             var inputSubdivision = document.getElementById('inputSubdivision').value.trim();
-            var inputDepartament = document.getElementById('inputDepartament').value.trim();
+            var inputDepartament = document.getElementById('inputDepartment').value.trim();
             var inputGroup = document.getElementById('inputGroup').value.trim();
             var inputJobTitle = document.getElementById('inputJobTitle').value.trim();
             var inputName = document.getElementById('inputName').value.trim().toLowerCase(); // Добавлено
@@ -325,7 +368,7 @@
             }
             if (inputDepartament !== '') {
                 filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputDepartament')">Отдел: ${inputDepartament}</span></div>`;
+            <span onclick="removeFilterItem(this, 'inputDepartment')">Отдел: ${inputDepartament}</span></div>`;
             }
             if (inputGroup !== '') {
                 filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
