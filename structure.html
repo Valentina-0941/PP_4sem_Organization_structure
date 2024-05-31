@@ -12,9 +12,6 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
 
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
-
     <style>
         header {
             width: 55px;
@@ -126,44 +123,44 @@
         <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards">
         </div>
         <!--Список сотрудников - карточки-->
-<!--        <div class="cards d-flex row gap-3 my-4 mx-4">-->
-<!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
-<!--                 aria-controls="offcanvasExample">-->
-<!--                <div class="card-img-top img-fluid"-->
-<!--                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">-->
-<!--                </div>-->
-<!--                <div class="card-body text-center">-->
-<!--                    <h6 class="card-title">Иванов Иван Иванович</h6>-->
-<!--                    <div class="card-text">-->
-<!--                        <p>Должность</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
-<!--                 aria-controls="offcanvasExample">-->
-<!--                <div class="card-img-top img-fluid"-->
-<!--                     style="background: url(source/img/photo_test_2.jpg) center; background-size: cover; width:150px; height: 180px;">-->
-<!--                </div>-->
-<!--                <div class="card-body text-center">-->
-<!--                    <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>-->
-<!--                    <div class="card-text">-->
-<!--                        <p>Специалист</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
-<!--                 aria-controls="offcanvasExample">-->
-<!--                <div class="card-img-top img-fluid"-->
-<!--                     style="background: url(source/img/photo_test_1.jpg) center; background-size: cover; width:150px; height: 180px;">-->
-<!--                </div>-->
-<!--                <div class="card-body text-center">-->
-<!--                    <h6 class="card-title">Константинов Иван Леонидович</h6>-->
-<!--                    <div class="card-text">-->
-<!--                        <p>Ведущий инженер</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="cards d-flex row gap-3 my-4 mx-4">-->
+        <!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
+        <!--                 aria-controls="offcanvasExample">-->
+        <!--                <div class="card-img-top img-fluid"-->
+        <!--                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">-->
+        <!--                </div>-->
+        <!--                <div class="card-body text-center">-->
+        <!--                    <h6 class="card-title">Иванов Иван Иванович</h6>-->
+        <!--                    <div class="card-text">-->
+        <!--                        <p>Должность</p>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
+        <!--                 aria-controls="offcanvasExample">-->
+        <!--                <div class="card-img-top img-fluid"-->
+        <!--                     style="background: url(source/img/photo_test_2.jpg) center; background-size: cover; width:150px; height: 180px;">-->
+        <!--                </div>-->
+        <!--                <div class="card-body text-center">-->
+        <!--                    <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>-->
+        <!--                    <div class="card-text">-->
+        <!--                        <p>Специалист</p>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
+        <!--                 aria-controls="offcanvasExample">-->
+        <!--                <div class="card-img-top img-fluid"-->
+        <!--                     style="background: url(source/img/photo_test_1.jpg) center; background-size: cover; width:150px; height: 180px;">-->
+        <!--                </div>-->
+        <!--                <div class="card-body text-center">-->
+        <!--                    <h6 class="card-title">Константинов Иван Леонидович</h6>-->
+        <!--                    <div class="card-text">-->
+        <!--                        <p>Ведущий инженер</p>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 
     <!--Информация о сотруднике -->
@@ -260,8 +257,6 @@
     </script>
 
 
-
-
     <!--Поиск - модальное окно | Скрипт-->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -327,6 +322,12 @@
             searchModal.show();
         });
     </script>
+</div>
+
+<div class="btn btn-light position-fixed bottom-0 end-0 m-3 p-2">
+    <a href="structure-graph.html">
+        <img class="icon" src="source/icon/fi-rr-department-structure.svg">
+    </a>
 </div>
 
 <!--Поиск | Скрипт-->
