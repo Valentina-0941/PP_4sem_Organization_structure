@@ -12,6 +12,8 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
 
+    <script src="js/navigation.js"></script>
+
     <style>
         header {
             width: 55px;
@@ -57,31 +59,8 @@
     <!--Боковая панель навигации-->
     <header>
         <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="height: 100vh;">
-            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto">
-                <li>
-                    <a href="index.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Главная страница">
-                        <img class="icon" src="source/icon/fi-rr-home.svg" alt="home icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link py-3" id="openModalBtn" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Поиск">
-                        <img class="icon" src="source/icon/fi-rr-search.svg" alt="search icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="structure.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Структура организации">
-                        <img class="icon" src="source/icon/fi-rr-stats.svg" alt="stats icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="help.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Помощь">
-                        <img class="icon" src="source/icon/fi-rr-question-square.svg" alt="question icon">
-                    </a>
-                </li>
+            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto" id="navigation">
+
             </ul>
             <div class="dropdown border-top">
                 <a href="#"
@@ -114,53 +93,21 @@
         <div class="filter-box d-flex flex-wrap"></div>
 
         <!--Сортировка по алфавиту-->
-        <div class="sort btn btn-light my-3 mx-4 px-4" style="border-radius: 16px;">
-            <a class="icon-link icon-link-hover" href="#">
-                <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;">
-                По алфавиту
-            </a>
+        <div class="my-3 mx-4 ">
+            <div class="btn btn-light px-4 divide_into_categories" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Разделить на
+                    категории</a>
+            </div>
+            <div class="sort btn btn-light px-4" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover" href="#">
+                    <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;">
+                    По алфавиту
+                </a>
+            </div>
         </div>
         <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards">
         </div>
-        <!--Список сотрудников - карточки-->
-        <!--        <div class="cards d-flex row gap-3 my-4 mx-4">-->
-        <!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
-        <!--                 aria-controls="offcanvasExample">-->
-        <!--                <div class="card-img-top img-fluid"-->
-        <!--                     style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;">-->
-        <!--                </div>-->
-        <!--                <div class="card-body text-center">-->
-        <!--                    <h6 class="card-title">Иванов Иван Иванович</h6>-->
-        <!--                    <div class="card-text">-->
-        <!--                        <p>Должность</p>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
-        <!--                 aria-controls="offcanvasExample">-->
-        <!--                <div class="card-img-top img-fluid"-->
-        <!--                     style="background: url(source/img/photo_test_2.jpg) center; background-size: cover; width:150px; height: 180px;">-->
-        <!--                </div>-->
-        <!--                <div class="card-body text-center">-->
-        <!--                    <h6 class="card-title">Константинова-Красильникова Капитолина Константиновна</h6>-->
-        <!--                    <div class="card-text">-->
-        <!--                        <p>Специалист</p>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="card p-3 btn" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"-->
-        <!--                 aria-controls="offcanvasExample">-->
-        <!--                <div class="card-img-top img-fluid"-->
-        <!--                     style="background: url(source/img/photo_test_1.jpg) center; background-size: cover; width:150px; height: 180px;">-->
-        <!--                </div>-->
-        <!--                <div class="card-body text-center">-->
-        <!--                    <h6 class="card-title">Константинов Иван Леонидович</h6>-->
-        <!--                    <div class="card-text">-->
-        <!--                        <p>Ведущий инженер</p>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
+
     </div>
 
     <!--Информация о сотруднике -->
@@ -173,11 +120,11 @@
         </div>
     </div>
 
-    <!--Информация о сотруднике | Скрипт-->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const jsonFilePath = '/data.json'; // Путь к вашему JSON файлу
             // Загружаем данные о сотрудниках из json файла
-            fetch('/data.json')
+            fetch(jsonFilePath)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Ошибка при загрузке данных о сотрудниках');
@@ -189,8 +136,8 @@
                     // Очищаем контейнер с карточками перед добавлением новых
                     cardsContainer.innerHTML = '';
 
-                    // Перебираем каждого сотрудника
-                    data.forEach(employee => {
+                    // Функция для создания карточки сотрудника
+                    function createEmployeeCard(employee) {
                         // Создаем элемент карточки
                         const card = document.createElement('div');
                         card.classList.add('card', 'p-3', 'btn');
@@ -198,18 +145,13 @@
                         card.setAttribute('data-bs-target', '#offcanvasExample');
                         card.setAttribute('aria-controls', 'offcanvasExample');
 
-                        // Добавляем атрибуты данных с информацией о сотруднике
-                        Object.entries(employee).forEach(([key, value]) => {
-                            card.setAttribute(`data-${key}`, value);
-                        });
-
                         // Создаем содержимое карточки (только ФИО и должность)
                         const cardContent = `
                         <div class="card-img-top img-fluid" style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;"></div>
                         <div class="card-body text-center">
-                            <h6 class="card-title">${employee['ФИО']}</h6>
+                            <h6 class="card-title">${employee.fio}</h6>
                             <div class="card-text">
-                                <p>${employee['Должность']}</p>
+                                <p>${employee.name}</p>
                             </div>
                         </div>
                     `;
@@ -219,6 +161,37 @@
 
                         // Добавляем карточку в контейнер
                         cardsContainer.appendChild(card);
+
+                        // Добавляем атрибуты данных с информацией о сотруднике
+                        Object.entries(employee).forEach(([key, value]) => {
+                            card.setAttribute(`data-${key}`, value);
+                        });
+                    }
+
+                    // Перебираем каждое юр. лицо
+                    data.children.forEach(yurFace => {
+                        // Перебираем каждую локацию
+                        yurFace.children.forEach(location => {
+                            // Перебираем каждое подразделение
+                            location.children.forEach(subdivision => {
+                                // Перебираем каждый отдел
+                                subdivision.children.forEach(department => {
+                                    // Перебираем каждую группу
+                                    department.children.forEach(group => {
+                                        // Перебираем каждую должность в группе
+                                        group.children.forEach(position => {
+                                            // Создаем карточку для каждой должности
+                                            createEmployeeCard({
+                                                name: position.name,
+                                                fio: position.children[0].fio,
+                                                job_title: position.children[0].job_title,
+                                                pos_number: position.children[0].pos_number
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
                     });
                 })
                 .catch(error => {
@@ -230,18 +203,27 @@
                 var target = event.target.closest('.card');
                 if (!target) return;
 
-                var fullName = target.dataset['ФИО'];
-                var jobPosition = target.dataset['Должность'];
+                // Получаем данные о сотруднике из атрибутов data-*
+                var fullName = target.getAttribute('data-fio');
+                var jobPosition = target.getAttribute('data-job-title');
+                var numberPos = target.getAttribute('data-pos-number');
+                var jobType = target.getAttribute('data-job-type');
+                var group = target.getAttribute('data-group');
+                var departament = target.getAttribute('data-departament');
+                var subdivision = target.getAttribute('data-subdivision');
+                var location = target.getAttribute('data-location');
+                var yurFace = target.getAttribute('data-yur-face');
+
                 var employeeInfo = `
                 <h5 id="name">${fullName}</h5>
                 <p id="jobTitle">${jobPosition}</p>
-                <p id="numberPos">Номер позиции: ${target.dataset['Номер_позиции']}</p>
-                <p id="jobType">Тип работы: ${target.dataset['Тип_работы']}</p>
-                <p id="group">Группа: ${target.dataset['Группа']}</p>
-                <p id="departament">Отдел: ${target.dataset['Отдел']}</p>
-                <p id="subdivision">Подразделение: ${target.dataset['Подразделение']}</p>
-                <p id="location">Локация: ${target.dataset['Локация']}</p>
-                <p id="yurFace">Юр. лицо: ${target.dataset['ЮЛ']}</p>
+                <p id="numberPos">Номер позиции: ${numberPos}</p>
+                <p id="jobType">Тип работы: ${jobType}</p>
+                <p id="group">Группа: ${group}</p>
+                <p id="departament">Отдел: ${departament}</p>
+                <p id="subdivision">Подразделение: ${subdivision}</p>
+                <p id="location">Локация: ${location}</p>
+                <p id="yurFace">Юр. лицо: ${yurFace}</p>
             `;
 
                 // Получаем элемент offcanvas-body
@@ -253,8 +235,10 @@
                 // Отображаем информацию о сотруднике в offcanvas
                 offcanvasBody.innerHTML = employeeInfo;
             });
+
         });
     </script>
+    <!--Информация о сотруднике | Скрипт-->
 
 
     <!--Поиск - модальное окно | Скрипт-->
@@ -323,13 +307,6 @@
         });
     </script>
 </div>
-
-<div class="btn btn-light position-fixed bottom-0 end-0 m-3 p-2">
-    <a href="structure-graph.html">
-        <img class="icon" src="source/icon/fi-rr-department-structure.svg">
-    </a>
-</div>
-
 <!--Поиск | Скрипт-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -433,7 +410,7 @@
 
 </script>
 
-<!--Сортировка | Скрипт-->
+<!-- Сортировка | Скрипт -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Находим кнопку "По алфавиту" и иконку для сортировки
@@ -442,9 +419,13 @@
 
         // Переменная для отслеживания текущего порядка сортировки (по возрастанию или убыванию)
         var ascendingOrder = true;
+        var clickCount = 0; // Счетчик кликов
 
         // Добавляем обработчик события на клик по кнопке
         sortButton.addEventListener('click', function () {
+            // Увеличиваем счетчик кликов
+            clickCount++;
+
             // Получаем все карточки
             var cards = document.querySelectorAll('.cards .card');
 
@@ -470,15 +451,97 @@
             // Инвертируем переменную для отслеживания текущего порядка сортировки
             ascendingOrder = !ascendingOrder;
 
-            // Инвертируем иконку сортировки
+            // Изменяем иконку сортировки в зависимости от текущего порядка сортировки
             if (ascendingOrder) {
                 icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-down.svg');
             } else {
                 icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-up.svg');
             }
+
+            // Если кликов было три, сбрасываем сортировку
+            if (clickCount === 3) {
+                // Сбрасываем сортировку
+                cardsArray.sort(function (a, b) {
+                    return 0; // Не меняем порядок элементов
+                });
+
+                // Очищаем контейнер и вставляем карточки в исходном порядке
+                cardContainer.innerHTML = '';
+                cardsArray.forEach(function (card) {
+                    cardContainer.appendChild(card);
+                });
+
+                // Сбрасываем переменные
+                ascendingOrder = true;
+                clickCount = 0;
+
+                // Возвращаем исходную иконку сортировки
+                icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha.svg');
+            }
+        });
+
+        // Находим кнопку "Разделить на категории"
+        var divideButton = document.querySelector('.divide_into_categories');
+
+        // Добавляем обработчик клика по кнопке
+        divideButton.addEventListener('click', function () {
+            // Получаем все карточки
+            var cards = document.querySelectorAll('.cards .card');
+
+            // Создаем объект для хранения категорий
+            var categories = {};
+
+            // Перебираем каждую карточку
+            cards.forEach(function (card) {
+                // Получаем данные о карточке из атрибутов data-*
+                var yurFace = card.getAttribute('data-ЮЛ');
+                var location = card.getAttribute('data-Локация');
+                var subdivision = card.getAttribute('data-Подразделение');
+                var department = card.getAttribute('data-Отдел');
+                var group = card.getAttribute('data-Группа');
+
+                // Формируем идентификатор категории
+                var categoryKey = `${yurFace}_${location}_${subdivision}_${department}_${group}`;
+
+                // Проверяем, существует ли такая категория в объекте categories
+                if (!categories[categoryKey]) {
+                    // Если категория не существует, создаем новую
+                    categories[categoryKey] = {
+                        yurFace: yurFace,
+                        location: location,
+                        subdivision: subdivision,
+                        department: department,
+                        group: group,
+                        cards: [] // Массив для хранения карточек в этой категории
+                    };
+                }
+
+                // Добавляем текущую карточку в соответствующую категорию
+                categories[categoryKey].cards.push(card);
+            });
+
+            // Очищаем контейнер с карточками перед добавлением категорий
+            var cardContainer = document.querySelector('.cards');
+            cardContainer.innerHTML = '';
+
+            // Перебираем все категории и вставляем их содержимое в контейнер
+            Object.keys(categories).forEach(function (key) {
+                var category = categories[key];
+
+                // Создаем элементы для категории
+                var categoryTitle = document.createElement('h3');
+                categoryTitle.textContent = `${category.yurFace} / ${category.location} / ${category.subdivision} / ${category.department} / ${category.group}`;
+                cardContainer.appendChild(categoryTitle);
+
+                // Добавляем карточки в категорию
+                category.cards.forEach(function (card) {
+                    cardContainer.appendChild(card);
+                });
+            });
         });
     });
 </script>
+
 
 </body>
 </html>
