@@ -16,9 +16,6 @@ root, [data-bs-theme=light] {
 .offcanvas{
     --bs-offcanvas-width:300px;
 }
-img{
-    background-color: #6c757d;
-}
 
 main{
     margin: 10% 0;

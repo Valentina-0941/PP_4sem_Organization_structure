@@ -14,78 +14,71 @@
 
     <!--Css-->
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="js/navigation.js"></script>
 
+    <style>
+
+        header {
+            width: 55px;
+        }
+
+        .icon {
+            width: 24px;
+        }
+
+        .profil * {
+            padding: 0;
+        }
+
+    </style>
 </head>
 <body>
-<header>
-    <nav class="navbar bg-light px-5">
-        <div class="container-fluid row row-cols-auto">
-            <button class="navbar-toggler col" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <p class="navbar-brand mb-0 h1 col">Название сайта</p>
-        </div>
-    </nav>
-    <div class="offcanvas offcanvas-start" id="navbarNav" tabindex="-1" aria-labelledby="navbarNavLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="navbarNavLabel">Навигация</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body d-flex flex-column flex-shrink-0 p-3">
-            <hr class="mt-0">
-            <ul class="nav flex-column mb-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Главная</a>
-                </li>
-                <!--                <li class="nav-item">-->
-                <!--                    <a class="nav-link" href="#">Структура организации</a>-->
-                <!--                </li>-->
-                <li class="nav-item">
-                    <a class="nav-link" href="#">О сайте</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Помощь</a>
-                </li>
+<div class="d-flex">
+    <!--Боковая панель навигации-->
+    <header>
+        <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="height: 100vh;">
+            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto" id="navigation">
             </ul>
-            <hr>
-            <div class="dropdown">
-                <!-- Кнопка-триггер модального окна -->
-                <a href='login.html' class="btn btn-light w-100">
-                    Sign in
+            <div class="dropdown border-top">
+                <a href="#"
+                   class="d-flex align-items-center justify-content-center py-3 link-body-emphasis text-decoration-none dropdown-toggle"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="" alt="" width="24" height="24" class="rounded-circle">
                 </a>
-            </div>
+                <ul class="dropdown-menu text-small shadow">
+                    <li><a class="dropdown-item" href="account.html">Профиль</a></li>
+                    <li><a class="dropdown-item" href="settings.html">Настройки</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
 
-            <!--            <a href="#" class="d-flex align-items-center px-3 link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
-            <!--                <img src="" alt="mdo" width="32" height="32" class="rounded-circle">-->
-            <!--            </a>-->
-            <!--            <ul class="dropdown-menu text-small shadow" style="">-->
-            <!--                <li><a class="dropdown-item" href="#">Settings</a></li>-->
-            <!--                <li><a class="dropdown-item" href="#">Profile</a></li>-->
-            <!--                <li><hr class="dropdown-divider"></li>-->
-            <!--                <li><a class="dropdown-item" href="#">Sign out</a></li>-->
-            <!--            </ul>-->
-
-        </div>
-    </div>
-</header>
-<main>
-    <div class="d-flex container-fluid justify-content-center">
-        <div class="">
-            <h1 class="display-4">Приветствуем Вас!</h1>
-            <p class="lead my-4">Готовы ли вы начать обучение сейчас или предпочтете сразу перейти к работе?</p>
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-light w-100">Пройти обучение</button>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn w-100">Авторизоваться</button>
-                </div>
+                </ul>
             </div>
         </div>
-    </div>
-</main>
-<footer>
-</footer>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        </script>
+    </header>
+    <main class="w-100">
+        <div class="d-flex container-fluid justify-content-center">
+            <div class="">
+                <h1 class="display-4">Приветствуем Вас!</h1>
+                <p class="lead my-4">Готовы ли вы начать обучение сейчас или предпочтете сразу перейти к работе?</p>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" disabled class="btn btn-light w-100">Пройти обучение</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn w-100">Авторизоваться</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 </body>
 </html>

@@ -12,7 +12,9 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
 
-
+    <script src="js/d3.v7.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/force-directed-graph-script.js"></script>
 
     <style>
         header {
@@ -36,6 +38,28 @@
             white-space: nowrap;
         }
 
+        .links line {
+            stroke: #999;
+            stroke-opacity: 0.6;
+            stroke-width: 1.5px;
+        }
+
+        .labels text {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: #333;
+        }
+
+        .main-node {
+            font-size: 26px !important;
+            text-align: center !important;
+            width: min-content !important;
+        }
+
+        #tooltip {
+            overflow-y: scroll; /* или overflow: auto; */
+            max-height: 100vh; /* или другое значение, которое необходимо */
+        }
     </style>
 
 </head>
@@ -44,31 +68,7 @@
     <!--Боковая панель навигации-->
     <header>
         <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="height: 100vh;">
-            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto">
-                <li>
-                    <a href="index.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Главная страница">
-                        <img class="icon" src="source/icon/fi-rr-home.svg" alt="home icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link py-3" id="openModalBtn" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Поиск">
-                        <img class="icon" src="source/icon/fi-rr-search.svg" alt="search icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="structure.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Структура организации">
-                        <img class="icon" src="source/icon/fi-rr-stats.svg" alt="stats icon">
-                    </a>
-                </li>
-                <li>
-                    <a href="help.html" class="nav-link py-3" data-bs-toggle="tooltip"
-                       data-bs-placement="right" aria-label="Dashboard" data-bs-original-title="Помощь">
-                        <img class="icon" src="source/icon/fi-rr-question-square.svg" alt="question icon">
-                    </a>
-                </li>
+            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto" id="navigation">
             </ul>
             <div class="dropdown border-top">
                 <a href="#"
@@ -95,65 +95,21 @@
             });
         </script>
     </header>
-    <div id="container"></div>
-    <script src="js/d3.v7.js"></script>
-    <script>
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                const links = data.links;
-                const nodes = data.nodes;
-
-                const svg = d3.select("svg");
-                const width = +svg.attr("width");
-                const height = +svg.attr("height");
-
-                const simulation = d3.forceSimulation(nodes)
-                    .force("link", d3.forceLink(links).id(d => d.id))
-                    .force("charge", d3.forceManyBody())
-                    .force("center", d3.forceCenter(width / 2, height / 2));
-
-                const link = svg.append("g")
-                    .attr("stroke", "#999")
-                    .attr("stroke-opacity", 0.6)
-                    .selectAll("line")
-                    .data(links)
-                    .join("line")
-                    .attr("stroke-width", d => Math.sqrt(d.value));
-
-                const node = svg.append("g")
-                    .attr("stroke", "#fff")
-                    .attr("stroke-width", 1.5)
-                    .selectAll("circle")
-                    .data(nodes)
-                    .join("circle")
-                    .attr("r", 5)
-                    .attr("fill", "steelblue");
-
-                node.append("title")
-                    .text(d => d.id);
-
-                simulation.on("tick", () => {
-                    link
-                        .attr("x1", d => d.source.x)
-                        .attr("y1", d => d.source.y)
-                        .attr("x2", d => d.target.x)
-                        .attr("y2", d => d.target.y);
-
-                    node
-                        .attr("cx", d => d.x)
-                        .attr("cy", d => d.y);
-                });
-            })
-            .catch(error => {
-                console.error('Ошибка при загрузке данных:', error);
-            });
-    </script>
-</div>
-<div class="btn btn-light position-fixed bottom-0 end-0 m-3 p-2">
-    <a href="structure.html">
-        <img class="icon" src="source/icon/fi-rr-chart-tree-map.svg">
-    </a>
+    <div class="w-100 ">
+        <div class="d-flex">
+            <div class="w-75" id="chart" style="height: 100vh;"></div>
+            <div class="w-25 bg-light" id="tooltip" style="height: 100vh;"></div>
+        </div>
+        <div class="z-1 d-flex bg-light position-absolute bottom-0 px-2 py-1" id="temp">
+            <div class="btn btn-danger py-0">Отобразить все элементы</div>
+            <div class="d-flex ">Сгрупировать по:
+                <div class="btn btn-danger py-0">Город</div>
+                <div class="btn btn-danger py-0">Отдел</div>
+                <div class="btn btn-danger py-0">Город</div>
+                <div class="btn btn-danger py-0">Город</div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
