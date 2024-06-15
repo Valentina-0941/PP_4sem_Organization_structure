@@ -98,6 +98,9 @@
                 <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Разделить на
                     категории</a>
             </div>
+            <div class="btn btn-light px-4" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Вывести свободные должности</a>
+            </div>
             <div class="sort btn btn-light px-4" style="border-radius: 16px;">
                 <a class="icon-link icon-link-hover" href="#">
                     <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;">
@@ -105,8 +108,7 @@
                 </a>
             </div>
         </div>
-        <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards">
-        </div>
+        <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards"></div>
 
     </div>
 
@@ -120,124 +122,8 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const jsonFilePath = '/data.json'; // Путь к вашему JSON файлу
-            // Загружаем данные о сотрудниках из json файла
-            fetch(jsonFilePath)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Ошибка при загрузке данных о сотрудниках');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const cardsContainer = document.querySelector('#employeeCards');
-                    // Очищаем контейнер с карточками перед добавлением новых
-                    cardsContainer.innerHTML = '';
+    <script src="js/structure-script.js"></script>
 
-                    // Функция для создания карточки сотрудника
-                    function createEmployeeCard(employee) {
-                        // Создаем элемент карточки
-                        const card = document.createElement('div');
-                        card.classList.add('card', 'p-3', 'btn');
-                        card.setAttribute('data-bs-toggle', 'offcanvas');
-                        card.setAttribute('data-bs-target', '#offcanvasExample');
-                        card.setAttribute('aria-controls', 'offcanvasExample');
-
-                        // Создаем содержимое карточки (только ФИО и должность)
-                        const cardContent = `
-                        <div class="card-img-top img-fluid" style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;"></div>
-                        <div class="card-body text-center">
-                            <h6 class="card-title">${employee.fio}</h6>
-                            <div class="card-text">
-                                <p>${employee.name}</p>
-                            </div>
-                        </div>
-                    `;
-
-                        // Добавляем содержимое карточки в элемент карточки
-                        card.innerHTML = cardContent;
-
-                        // Добавляем карточку в контейнер
-                        cardsContainer.appendChild(card);
-
-                        // Добавляем атрибуты данных с информацией о сотруднике
-                        Object.entries(employee).forEach(([key, value]) => {
-                            card.setAttribute(`data-${key}`, value);
-                        });
-                    }
-
-                    // Перебираем каждое юр. лицо
-                    data.children.forEach(yurFace => {
-                        // Перебираем каждую локацию
-                        yurFace.children.forEach(location => {
-                            // Перебираем каждое подразделение
-                            location.children.forEach(subdivision => {
-                                // Перебираем каждый отдел
-                                subdivision.children.forEach(department => {
-                                    // Перебираем каждую группу
-                                    department.children.forEach(group => {
-                                        // Перебираем каждую должность в группе
-                                        group.children.forEach(position => {
-                                            // Создаем карточку для каждой должности
-                                            createEmployeeCard({
-                                                name: position.name,
-                                                fio: position.children[0].fio,
-                                                job_title: position.children[0].job_title,
-                                                pos_number: position.children[0].pos_number
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.error('Ошибка при загрузке данных о сотрудниках:', error);
-                });
-
-            // Обработчик клика на карточке
-            document.addEventListener('click', function (event) {
-                var target = event.target.closest('.card');
-                if (!target) return;
-
-                // Получаем данные о сотруднике из атрибутов data-*
-                var fullName = target.getAttribute('data-fio');
-                var jobPosition = target.getAttribute('data-job-title');
-                var numberPos = target.getAttribute('data-pos-number');
-                var jobType = target.getAttribute('data-job-type');
-                var group = target.getAttribute('data-group');
-                var departament = target.getAttribute('data-departament');
-                var subdivision = target.getAttribute('data-subdivision');
-                var location = target.getAttribute('data-location');
-                var yurFace = target.getAttribute('data-yur-face');
-
-                var employeeInfo = `
-                <h5 id="name">${fullName}</h5>
-                <p id="jobTitle">${jobPosition}</p>
-                <p id="numberPos">Номер позиции: ${numberPos}</p>
-                <p id="jobType">Тип работы: ${jobType}</p>
-                <p id="group">Группа: ${group}</p>
-                <p id="departament">Отдел: ${departament}</p>
-                <p id="subdivision">Подразделение: ${subdivision}</p>
-                <p id="location">Локация: ${location}</p>
-                <p id="yurFace">Юр. лицо: ${yurFace}</p>
-            `;
-
-                // Получаем элемент offcanvas-body
-                var offcanvasBody = document.querySelector('.offcanvas-body');
-
-                // Очищаем содержимое offcanvas-body
-                offcanvasBody.innerHTML = '';
-
-                // Отображаем информацию о сотруднике в offcanvas
-                offcanvasBody.innerHTML = employeeInfo;
-            });
-
-        });
-    </script>
     <!--Информация о сотруднике | Скрипт-->
 
 
@@ -268,8 +154,8 @@
                             <input type="text" class="form-control" id="inputSubdivision">
                         </div>
                         <div class="col">
-                            <label for="inputDepartament" class="form-label">Отдел</label>
-                            <input type="text" class="form-control" id="inputDepartament">
+                            <label for="inputDepartment" class="form-label">Отдел</label>
+                            <input type="text" class="form-control" id="inputDepartment">
                         </div>
                         <div class="col">
                             <label for="inputGroup" class="form-label">Группа</label>
@@ -299,13 +185,13 @@
     </div>
 
     <!--Поиск - модальное окно | Скрипт-->
-    <script>
-        var openModalBtn = document.getElementById('openModalBtn');
-        var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
-        openModalBtn.addEventListener('click', function () {
-            searchModal.show();
-        });
-    </script>
+<!--    <script>-->
+<!--        var openModalBtn = document.getElementById('openModalBtn');-->
+<!--        var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));-->
+<!--        openModalBtn.addEventListener('click', function () {-->
+<!--            searchModal.show();-->
+<!--        });-->
+<!--    </script>-->
 </div>
 <!--Поиск | Скрипт-->
 <script>
@@ -320,7 +206,7 @@
             var inputYurFace = document.getElementById('inputYurFace').value.trim();
             var inputLocation = document.getElementById('inputLocation').value.trim();
             var inputSubdivision = document.getElementById('inputSubdivision').value.trim();
-            var inputDepartament = document.getElementById('inputDepartment').value.trim();
+            var inputDepartment = document.getElementById('inputDepartment').value.trim();
             var inputGroup = document.getElementById('inputGroup').value.trim();
             var inputJobTitle = document.getElementById('inputJobTitle').value.trim();
             var inputName = document.getElementById('inputName').value.trim().toLowerCase(); // Добавлено
@@ -344,9 +230,9 @@
                 filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
             <span onclick="removeFilterItem(this, 'inputSubdivision')">Подразделение: ${inputSubdivision}</span></div>`;
             }
-            if (inputDepartament !== '') {
+            if (inputDepartment !== '') {
                 filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputDepartment')">Отдел: ${inputDepartament}</span></div>`;
+            <span onclick="removeFilterItem(this, 'inputDepartment')">Отдел: ${inputDepartment}</span></div>`;
             }
             if (inputGroup !== '') {
                 filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
