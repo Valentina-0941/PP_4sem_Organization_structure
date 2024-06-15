@@ -13,6 +13,7 @@
             crossorigin="anonymous"></script>
 
     <script src="js/navigation.js"></script>
+    <script src="js/structure-script.js"></script>
 
     <style>
         header {
@@ -51,8 +52,59 @@
         /*    right: 0;*/
         /*    background-color: rgba(0, 0, 0, 0.25); !* Полупрозрачный фон *!*/
         /*}*/
-    </style>
 
+        .btn.disabled {
+            opacity: 0.6; /* Пример стиля для затухания блокированных кнопок */
+            pointer-events: none; /* Отключаем кликабельность */
+        }
+
+        /* Стили для заголовков разных уровней */
+        .category-level-1 {
+            background-color: #f8d7da; /* Цвет фона */
+            color: #721c24; /* Цвет текста */
+            border: 1px solid #f5c6cb; /* Обводка */
+            padding: 10px; /* Внутренний отступ */
+            border-radius: 5px; /* Закругление углов */
+            margin-bottom: 10px; /* Отступ снизу между заголовками */
+        }
+
+        .category-level-2 {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .category-level-3 {
+            background-color: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+            padding: 6px;
+            border-radius: 3px;
+            margin-bottom: 6px;
+        }
+
+        .category-level-4 {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 4px;
+            border-radius: 2px;
+            margin-bottom: 4px;
+        }
+
+        .category-level-5 {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            padding: 2px;
+            border-radius: 1px;
+            margin-bottom: 2px;
+        }
+
+    </style>
 </head>
 <body>
 <div class="d-flex">
@@ -93,21 +145,20 @@
         <div class="filter-box d-flex flex-wrap"></div>
 
         <!--Сортировка по алфавиту-->
-        <div class="my-3 mx-4 ">
+        <div class="my-3 mx-4">
             <div class="btn btn-light px-4 divide_into_categories" style="border-radius: 16px;">
-                <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Разделить на
-                    категории</a>
+                <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Разделить на категории</a>
             </div>
-            <div class="btn btn-light px-4" style="border-radius: 16px;">
+            <div class="btn btn-light px-4 show-vacant-positions" style="border-radius: 16px;">
                 <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Вывести свободные должности</a>
             </div>
             <div class="sort btn btn-light px-4" style="border-radius: 16px;">
                 <a class="icon-link icon-link-hover" href="#">
-                    <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;">
-                    По алфавиту
+                    <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;"> По алфавиту
                 </a>
             </div>
         </div>
+
         <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards"></div>
 
     </div>
@@ -121,11 +172,6 @@
         <div class="offcanvas-body">
         </div>
     </div>
-
-    <script src="js/structure-script.js"></script>
-
-    <!--Информация о сотруднике | Скрипт-->
-
 
     <!--Поиск - модальное окно | Скрипт-->
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -295,139 +341,6 @@
     }
 
 </script>
-
-<!-- Сортировка | Скрипт -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Находим кнопку "По алфавиту" и иконку для сортировки
-        var sortButton = document.querySelector('.sort');
-        var icon = document.getElementById('iconSort');
-
-        // Переменная для отслеживания текущего порядка сортировки (по возрастанию или убыванию)
-        var ascendingOrder = true;
-        var clickCount = 0; // Счетчик кликов
-
-        // Добавляем обработчик события на клик по кнопке
-        sortButton.addEventListener('click', function () {
-            // Увеличиваем счетчик кликов
-            clickCount++;
-
-            // Получаем все карточки
-            var cards = document.querySelectorAll('.cards .card');
-
-            // Преобразуем NodeList в массив для удобства работы
-            var cardsArray = Array.from(cards);
-
-            // Сортируем карточки по алфавиту по тексту внутри элемента с классом 'card-title'
-            cardsArray.sort(function (a, b) {
-                var titleA = a.querySelector('.card-title').textContent.trim().toLowerCase();
-                var titleB = b.querySelector('.card-title').textContent.trim().toLowerCase();
-                return ascendingOrder ? titleA.localeCompare(titleB) : titleB.localeCompare(titleA);
-            });
-
-            // Очищаем контейнер карточек
-            var cardContainer = document.querySelector('.cards');
-            cardContainer.innerHTML = '';
-
-            // Вставляем отсортированные карточки обратно в контейнер
-            cardsArray.forEach(function (card) {
-                cardContainer.appendChild(card);
-            });
-
-            // Инвертируем переменную для отслеживания текущего порядка сортировки
-            ascendingOrder = !ascendingOrder;
-
-            // Изменяем иконку сортировки в зависимости от текущего порядка сортировки
-            if (ascendingOrder) {
-                icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-down.svg');
-            } else {
-                icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-up.svg');
-            }
-
-            // Если кликов было три, сбрасываем сортировку
-            if (clickCount === 3) {
-                // Сбрасываем сортировку
-                cardsArray.sort(function (a, b) {
-                    return 0; // Не меняем порядок элементов
-                });
-
-                // Очищаем контейнер и вставляем карточки в исходном порядке
-                cardContainer.innerHTML = '';
-                cardsArray.forEach(function (card) {
-                    cardContainer.appendChild(card);
-                });
-
-                // Сбрасываем переменные
-                ascendingOrder = true;
-                clickCount = 0;
-
-                // Возвращаем исходную иконку сортировки
-                icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha.svg');
-            }
-        });
-
-        // Находим кнопку "Разделить на категории"
-        var divideButton = document.querySelector('.divide_into_categories');
-
-        // Добавляем обработчик клика по кнопке
-        divideButton.addEventListener('click', function () {
-            // Получаем все карточки
-            var cards = document.querySelectorAll('.cards .card');
-
-            // Создаем объект для хранения категорий
-            var categories = {};
-
-            // Перебираем каждую карточку
-            cards.forEach(function (card) {
-                // Получаем данные о карточке из атрибутов data-*
-                var yurFace = card.getAttribute('data-ЮЛ');
-                var location = card.getAttribute('data-Локация');
-                var subdivision = card.getAttribute('data-Подразделение');
-                var department = card.getAttribute('data-Отдел');
-                var group = card.getAttribute('data-Группа');
-
-                // Формируем идентификатор категории
-                var categoryKey = `${yurFace}_${location}_${subdivision}_${department}_${group}`;
-
-                // Проверяем, существует ли такая категория в объекте categories
-                if (!categories[categoryKey]) {
-                    // Если категория не существует, создаем новую
-                    categories[categoryKey] = {
-                        yurFace: yurFace,
-                        location: location,
-                        subdivision: subdivision,
-                        department: department,
-                        group: group,
-                        cards: [] // Массив для хранения карточек в этой категории
-                    };
-                }
-
-                // Добавляем текущую карточку в соответствующую категорию
-                categories[categoryKey].cards.push(card);
-            });
-
-            // Очищаем контейнер с карточками перед добавлением категорий
-            var cardContainer = document.querySelector('.cards');
-            cardContainer.innerHTML = '';
-
-            // Перебираем все категории и вставляем их содержимое в контейнер
-            Object.keys(categories).forEach(function (key) {
-                var category = categories[key];
-
-                // Создаем элементы для категории
-                var categoryTitle = document.createElement('h3');
-                categoryTitle.textContent = `${category.yurFace} / ${category.location} / ${category.subdivision} / ${category.department} / ${category.group}`;
-                cardContainer.appendChild(categoryTitle);
-
-                // Добавляем карточки в категорию
-                category.cards.forEach(function (card) {
-                    cardContainer.appendChild(card);
-                });
-            });
-        });
-    });
-</script>
-
 
 </body>
 </html>
