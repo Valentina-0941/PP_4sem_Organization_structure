@@ -12,6 +12,7 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/structure-script.js"></script>
 
@@ -22,10 +23,6 @@
 
         .icon {
             width: 24px;
-        }
-
-        .profil * {
-            padding: 0;
         }
 
         .search-box {
@@ -45,17 +42,6 @@
         .card {
             width: 190px;
             align-items: center;
-        }
-
-        /*.view_structure {*/
-        /*    position: fixed;*/
-        /*    right: 0;*/
-        /*    background-color: rgba(0, 0, 0, 0.25); !* Полупрозрачный фон *!*/
-        /*}*/
-
-        .btn.disabled {
-            opacity: 0.6; /* Пример стиля для затухания блокированных кнопок */
-            pointer-events: none; /* Отключаем кликабельность */
         }
 
         /* Стили для заголовков разных уровней */
@@ -103,14 +89,13 @@
             border-radius: 1px;
             margin-bottom: 2px;
         }
-
     </style>
 </head>
 <body>
 <div class="d-flex">
     <!--Боковая панель навигации-->
-    <header>
-        <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary" style="height: 100vh;">
+    <header class="">
+        <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary position-fixed" style="height: 100vh;">
             <ul class="nav nav-pills nav-flush flex-column text-center mb-auto" id="navigation">
 
             </ul>
@@ -130,37 +115,29 @@
                 </ul>
             </div>
         </div>
-
-        <!--Боковая панель навигации | Скрипт-->
-        <script>
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        </script>
     </header>
 
     <div class="w-100">
-        <!--Поиск-->
-        <div class="filter-box d-flex flex-wrap"></div>
-
         <!--Сортировка по алфавиту-->
         <div class="my-3 mx-4">
             <div class="btn btn-light px-4 divide_into_categories" style="border-radius: 16px;">
                 <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Разделить на категории</a>
             </div>
             <div class="btn btn-light px-4 show-vacant-positions" style="border-radius: 16px;">
-                <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Вывести свободные должности</a>
+                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Вывести свободные должности</a>
             </div>
-            <div class="sort btn btn-light px-4" style="border-radius: 16px;">
-                <a class="icon-link icon-link-hover" href="#">
-                    <img src="source/icon/fi-rr-sort-alpha-down.svg" id="iconSort" style="width: 16px;"> По алфавиту
+            <div class="sort btn btn-light px-4 sort" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Сортировка</a>
+            </div>
+            <div class="btn btn-light search" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#" id="openModalBtn">
+                    <img src="source/icon/fi-rr-search.svg" alt="Поиск" style="width: 16px;">
                 </a>
             </div>
         </div>
-
+        <!--Поиск-->
+        <div class="filter-box d-flex gap-3 my-4 mx-4"></div>
         <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards"></div>
-
     </div>
 
     <!--Информация о сотруднике -->
@@ -173,9 +150,8 @@
         </div>
     </div>
 
-    <!--Поиск - модальное окно | Скрипт-->
-    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
+    <!-- Модальное окно для поиска -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -229,118 +205,7 @@
             </div>
         </div>
     </div>
-
-    <!--Поиск - модальное окно | Скрипт-->
-<!--    <script>-->
-<!--        var openModalBtn = document.getElementById('openModalBtn');-->
-<!--        var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));-->
-<!--        openModalBtn.addEventListener('click', function () {-->
-<!--            searchModal.show();-->
-<!--        });-->
-<!--    </script>-->
+    <script src="js/search.js"></script>
 </div>
-<!--Поиск | Скрипт-->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var applyFilterBtn = document.querySelector('#applyFilterBtn');
-        var clearFilterBtn = document.querySelector('#clearFilterBtn');
-        var closeModalBtn = document.querySelector('[data-bs-dismiss="modal"]');
-        var filterBox = document.querySelector('.filter-box');
-
-        applyFilterBtn.addEventListener('click', function () {
-            var inputNumberPos = document.getElementById('inputNumberPos').value.trim();
-            var inputYurFace = document.getElementById('inputYurFace').value.trim();
-            var inputLocation = document.getElementById('inputLocation').value.trim();
-            var inputSubdivision = document.getElementById('inputSubdivision').value.trim();
-            var inputDepartment = document.getElementById('inputDepartment').value.trim();
-            var inputGroup = document.getElementById('inputGroup').value.trim();
-            var inputJobTitle = document.getElementById('inputJobTitle').value.trim();
-            var inputName = document.getElementById('inputName').value.trim().toLowerCase(); // Добавлено
-            var inputJobType = document.getElementById('inputJobType').value.trim();
-
-            filterBox.innerHTML = ''; // Очищаем содержимое filter-box перед добавлением новых элементов
-
-            if (inputNumberPos !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputNumberPos')">Номер позиции: ${inputNumberPos}</span></div>`;
-            }
-            if (inputYurFace !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputYurFace')">Юр. лицо: ${inputYurFace}</span></div>`;
-            }
-            if (inputLocation !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputLocation')">Локация: ${inputLocation}</span></div>`;
-            }
-            if (inputSubdivision !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputSubdivision')">Подразделение: ${inputSubdivision}</span></div>`;
-            }
-            if (inputDepartment !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputDepartment')">Отдел: ${inputDepartment}</span></div>`;
-            }
-            if (inputGroup !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputGroup')">Группа: ${inputGroup}</span></div>`;
-            }
-            if (inputJobTitle !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputJobTitle')">Должность: ${inputJobTitle}</span></div>`;
-            }
-            if (inputName !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputName')">ФИО: ${inputName}</span></div>`;
-            }
-            if (inputJobType !== '') {
-                filterBox.innerHTML += `<div class="btn btn-light py-1 px-3 mx-3 my-2" style="border-radius: 16px;">\
-            <span onclick="removeFilterItem(this, 'inputJobType')">Тип работы: ${inputJobType}</span></div>`;
-            }
-
-            var inputName = document.getElementById('inputName').value.trim().toLowerCase();
-            var cards = document.querySelectorAll('.card');
-
-            cards.forEach(function (card) {
-                var cardName = card.querySelector('.card-title').innerText.trim().toLowerCase();
-                if (inputName !== '' && !cardName.includes(inputName)) {
-                    card.style.display = 'none';
-                } else {
-                    card.style.display = 'block';
-                }
-            });
-
-        });
-
-        clearFilterBtn.addEventListener('click', function () {
-            var filterInputs = document.querySelectorAll('.form-control');
-            filterInputs.forEach(function (input) {
-                input.value = '';
-            });
-
-            var cards = document.querySelectorAll('.card');
-            cards.forEach(function (card) {
-                card.style.display = 'block';
-            });
-            closeModalBtn();
-        });
-
-        closeModalBtn.addEventListener('click', function () {
-            var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
-            searchModal.hide();
-        });
-
-    });
-
-    <!-- Удалить элемент в filter-box -->
-    function removeFilterItem(element, inputId) {
-        element.parentNode.remove();
-        document.getElementById(inputId).value = '';
-
-        // После удаления элемента из filter-box, вызываем функцию, обновляющую фильтр
-        applyFilterBtn.click();
-    }
-
-</script>
-
 </body>
 </html>

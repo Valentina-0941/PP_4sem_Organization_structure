@@ -14,20 +14,14 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         {
             href: "structure-graph.html",
-            tooltip: "Структура организации (граф)",
+            tooltip: "Силовой граф",
             imgSrc: "source/icon/fi-rr-department-structure.svg",
             imgAlt: "structure icon"
         },
         {
             href: "structure-zoomable-icicle.html",
-            tooltip: "Zoomable icicle",
+            tooltip: "Масштабируемая сосулька",
             imgSrc: "source/icon/fi-rr-layout-fluid.svg",
-            imgAlt: "structure icon"
-        },
-        {
-            href: "structure-zoomable-sunburst.html",
-            tooltip: "Zoomable sunburst",
-            imgSrc: "source/icon/fi-rr-chart-pie-alt.svg",
             imgAlt: "structure icon"
         },
         {
@@ -48,11 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
         a.setAttribute('data-bs-toggle', 'tooltip');
         a.setAttribute('data-bs-placement', 'right');
         a.setAttribute('aria-label', 'Dashboard');
-        a.setAttribute('data-bs-original-title', item.tooltip);
-
-        if (item.id) {
-            a.id = item.id;
-        }
+        a.setAttribute('data-bs-original-title', item.tooltip); // Используем 'data-bs-original-title' для хранения и отображения tooltip
 
         const img = document.createElement('img');
         img.className = "icon";
@@ -64,8 +54,9 @@ document.addEventListener("DOMContentLoaded", function() {
         navContainer.appendChild(li);
     });
 
-    // Initialize tooltips
-    $(function () {
-        $('[data-bs-toggle="tooltip"]').tooltip();
+    // Initialize tooltips using Bootstrap's built-in function
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 });

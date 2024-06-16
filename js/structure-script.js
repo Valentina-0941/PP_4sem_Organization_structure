@@ -1,7 +1,8 @@
     document.addEventListener('DOMContentLoaded', function () {
         const jsonFilePath = '/data.json'; // Путь к вашему JSON файлу
         let isCategorized = false; // Флаг для отслеживания состояния категорий
-    
+        let sortingOrder = '';
+
         // Функция для создания карточки сотрудника
         function createEmployeeCard(employee) {
             const card = document.createElement('div');
@@ -43,7 +44,7 @@
         function processEmployeeData(data, categorized) {
             const cardsContainer = document.querySelector('#employeeCards');
             cardsContainer.innerHTML = '';
-    
+
             if (categorized) {
                 let collapseIdCounter = 1;
                 data.children.forEach(yurFace => {
@@ -101,8 +102,10 @@
                 const uncategorizedContainer = document.createElement('div');
                 uncategorizedContainer.classList.add('cards', 'd-flex', 'row', 'gap-3', 'my-4', 'mx-2');
                 cardsContainer.appendChild(uncategorizedContainer);
-    
-                data.children.forEach(yurFace => {
+
+                const sortedData = sortEmployeesAlphabetically(data.children);
+
+                sortedData.forEach(yurFace => {
                     yurFace.children.forEach(location => {
                         location.children.forEach(subdivision => {
                             subdivision.children.forEach(department => {
@@ -141,6 +144,96 @@
                 }
             });
         }
+
+        function sortEmployeesAlphabetically(data, order) {
+            if (!data || !Array.isArray(data)) return [];
+
+            const sortedData = data.map(yurFace => {
+                yurFace.children = yurFace.children.map(location => {
+                    location.children = location.children.map(subdivision => {
+                        subdivision.children = subdivision.children.map(department => {
+                            department.children = department.children.map(group => {
+                                group.children.sort((a, b) => {
+                                    if (order === 'asc') {
+                                        return a.children[0].fio.localeCompare(b.children[0].fio);
+                                    } else if (order === 'desc') {
+                                        return b.children[0].fio.localeCompare(a.children[0].fio);
+                                    }
+                                });
+                                return group;
+                            });
+
+                            if (order === 'asc') {
+                                department.children.sort((a, b) => a.name.localeCompare(b.name));
+                            } else if (order === 'desc') {
+                                department.children.sort((a, b) => b.name.localeCompare(a.name));
+                            }
+                            return department;
+                        });
+
+                        if (order === 'asc') {
+                            subdivision.children.sort((a, b) => a.name.localeCompare(b.name));
+                        } else if (order === 'desc') {
+                            subdivision.children.sort((a, b) => b.name.localeCompare(a.name));
+                        }
+                        return subdivision;
+                    });
+
+                    if (order === 'asc') {
+                        location.children.sort((a, b) => a.name.localeCompare(b.name));
+                    } else if (order === 'desc') {
+                        location.children.sort((a, b) => b.name.localeCompare(a.name));
+                    }
+                    return location;
+                });
+
+                if (order === 'asc') {
+                    yurFace.children.sort((a, b) => a.name.localeCompare(b.name));
+                } else if (order === 'desc') {
+                    yurFace.children.sort((a, b) => b.name.localeCompare(a.name));
+                }
+                return yurFace;
+            });
+
+            if (order === 'asc') {
+                sortedData.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (order === 'desc') {
+                sortedData.sort((a, b) => b.name.localeCompare(a.name));
+            }
+
+            return sortedData;
+        }
+
+
+        // Функция для обновления текста и иконки кнопки "По алфавиту"
+        function updateSortButtonUI() {
+            const sortButton = document.querySelector('.sort');
+
+            switch (sortingOrder) {
+                case 'asc':
+                    sortButton.innerHTML = `
+                        <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">
+                            Сортировка от А до Я
+                        </a>
+                    `;
+                    break;
+                case 'desc':
+                    sortButton.innerHTML = `
+                        <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">
+                            Сортировка от Я до А
+                        </a>
+                    `;
+                    break;
+                default:
+                    sortButton.innerHTML = `
+                        <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">
+                            Без сортировки
+                        </a>
+                    `;
+                    break;
+            }
+        }
+
 
         // Загружаем данные о сотрудниках из json файла и создаем карточки
         fetch(jsonFilePath)
@@ -194,137 +287,47 @@
             // Здесь может быть ваша логика для кнопки "Вывести свободные должности"
         });
 
-        // Обработчик клика на кнопку "По алфавиту"
+        // Обработчик клика на кнопку "Сортировка"
         const sortAlphabeticallyBtn = document.querySelector('.sort');
         sortAlphabeticallyBtn.addEventListener('click', function () {
-            console.log("По алфавиту");
-            document.addEventListener('DOMContentLoaded', function () {
-                // Находим кнопку "По алфавиту" и иконку для сортировки
-                var sortButton = document.querySelector('.sort');
-                var icon = document.getElementById('iconSort');
+            switch (sortingOrder) {
+                case 'asc':
+                    sortingOrder = 'desc';
+                    break;
+                case 'desc':
+                    sortingOrder = '';
+                    break;
+                default:
+                    sortingOrder = 'asc';
+                    break;
+            }
 
-                // Переменная для отслеживания текущего порядка сортировки (по возрастанию или убыванию)
-                var ascendingOrder = true;
-                var clickCount = 0; // Счетчик кликов
+            updateSortButtonUI(); // Обновляем текст кнопки
 
-                // Добавляем обработчик события на клик по кнопке
-                sortButton.addEventListener('click', function () {
-                    // Увеличиваем счетчик кликов
-                    clickCount++;
-
-                    // Получаем все карточки
-                    var cards = document.querySelectorAll('.cards .card');
-
-                    // Преобразуем NodeList в массив для удобства работы
-                    var cardsArray = Array.from(cards);
-
-                    // Сортируем карточки по алфавиту по тексту внутри элемента с классом 'card-title'
-                    cardsArray.sort(function (a, b) {
-                        var titleA = a.querySelector('.card-title').textContent.trim().toLowerCase();
-                        var titleB = b.querySelector('.card-title').textContent.trim().toLowerCase();
-                        return ascendingOrder ? titleA.localeCompare(titleB) : titleB.localeCompare(titleA);
-                    });
-
-                    // Очищаем контейнер карточек
-                    var cardContainer = document.querySelector('.cards');
-                    cardContainer.innerHTML = '';
-
-                    // Вставляем отсортированные карточки обратно в контейнер
-                    cardsArray.forEach(function (card) {
-                        cardContainer.appendChild(card);
-                    });
-
-                    // Инвертируем переменную для отслеживания текущего порядка сортировки
-                    ascendingOrder = !ascendingOrder;
-
-                    // Изменяем иконку сортировки в зависимости от текущего порядка сортировки
-                    if (ascendingOrder) {
-                        icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-down.svg');
-                    } else {
-                        icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha-up.svg');
+            // Повторно обрабатываем данные с учетом нового порядка сортировки
+            fetch(jsonFilePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка при загрузке данных о сотрудниках');
                     }
-
-                    // Если кликов было три, сбрасываем сортировку
-                    if (clickCount === 3) {
-                        // Сбрасываем сортировку
-                        cardsArray.sort(function (a, b) {
-                            return 0; // Не меняем порядок элементов
-                        });
-
-                        // Очищаем контейнер и вставляем карточки в исходном порядке
-                        cardContainer.innerHTML = '';
-                        cardsArray.forEach(function (card) {
-                            cardContainer.appendChild(card);
-                        });
-
-                        // Сбрасываем переменные
-                        ascendingOrder = true;
-                        clickCount = 0;
-
-                        // Возвращаем исходную иконку сортировки
-                        icon.setAttribute('src', 'source/icon/fi-rr-sort-alpha.svg');
-                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const sortedData = sortEmployeesAlphabetically(data.children);
+                    processEmployeeData({ children: sortedData }, isCategorized);
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке данных о сотрудниках:', error);
                 });
-
-                // Находим кнопку "Разделить на категории"
-                var divideButton = document.querySelector('.divide_into_categories');
-
-                // Добавляем обработчик клика по кнопке
-                divideButton.addEventListener('click', function () {
-                    // Получаем все карточки
-                    var cards = document.querySelectorAll('.cards .card');
-
-                    // Создаем объект для хранения категорий
-                    var categories = {};
-
-                    // Перебираем каждую карточку
-                    cards.forEach(function (card) {
-                        // Получаем данные о карточке из атрибутов data-*
-                        var yurFace = card.getAttribute('data-ЮЛ');
-                        var location = card.getAttribute('data-Локация');
-                        var subdivision = card.getAttribute('data-Подразделение');
-                        var department = card.getAttribute('data-Отдел');
-                        var group = card.getAttribute('data-Группа');
-
-                        // Формируем идентификатор категории
-                        var categoryKey = `${yurFace}_${location}_${subdivision}_${department}_${group}`;
-
-                        // Проверяем, существует ли такая категория в объекте categories
-                        if (!categories[categoryKey]) {
-                            // Если категория не существует, создаем новую
-                            categories[categoryKey] = {
-                                yurFace: yurFace,
-                                location: location,
-                                subdivision: subdivision,
-                                department: department,
-                                group: group,
-                                cards: [] // Массив для хранения карточек в этой категории
-                            };
-                        }
-
-                        // Добавляем текущую карточку в соответствующую категорию
-                        categories[categoryKey].cards.push(card);
-                    });
-
-                    // Очищаем контейнер с карточками перед добавлением категорий
-                    var cardContainer = document.querySelector('.cards');
-                    cardContainer.innerHTML = '';
-
-                    // Перебираем все категории и вставляем их содержимое в контейнер
-                    Object.keys(categories).forEach(function (key) {
-                        var category = categories[key];
-
-                        // Создаем элементы для категории
-                        var categoryTitle = document.createElement('h3');
-                        categoryTitle.textContent = `${category.yurFace} / ${category.location} / ${category.subdivision} / ${category.department} / ${category.group}`;
-                        cardContainer.appendChild(categoryTitle);
-
-                        // Добавляем карточки в категорию
-                        category.cards.forEach(function (card) {
-                            cardContainer.appendChild(card);
-                        });
-                    });
-                });
-            });
         });
+
+
+
+        // Обработчик клика на кнопку "Поиск"
+        const abcd = document.querySelector('.show-vacant-positions');
+        showVacantPositionsBtn.addEventListener('click', function () {
+            console.log("Вывести свободные должности");
+            // Здесь может быть ваша логика для кнопки "Поиск"
+        });
+
     });
