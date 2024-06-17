@@ -3,7 +3,6 @@ package ft.root.controllers;
 import ft.root.dto.CardPreviewInfo;
 import ft.root.dto.ExtendedCardInfo;
 import ft.root.entity.DepartmentGroup;
-import ft.root.entity.Entity;
 import ft.root.entity.Position;
 import ft.root.entity.Record;
 import ft.root.repository.*;
@@ -43,7 +42,7 @@ public class StructController {
         if (record == null) return null;
 
         ExtendedCardInfo info = new ExtendedCardInfo();
-
+        info.setNumber(record.getId());
         if (record.getEntity() != null) info.setEntity(record.getEntity().getName());
         if (record.getLocation() != null) info.setLocation(record.getLocation().getName());
         if (record.getDivision() != null) info.setDivision(record.getDivision().getName());
