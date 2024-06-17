@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.*;
 
+import java.util.List;
+
 @Entity(name = "departments_groups")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,4 +22,7 @@ public class DepartmentGroup {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+    @OneToMany(mappedBy = "departmentGroup", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> records;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.*;
 
+import java.util.List;
+
 @Entity(name = "departments")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,7 @@ public class Department {
     @ManyToOne
     @JoinColumn(name = "division_id")
     private Division division;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DepartmentGroup> departmentGroups;
 }

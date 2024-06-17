@@ -1,10 +1,10 @@
 package ft.root.entity;
 
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
+
+import java.util.List;
 
 @Entity(name = "divisions")
 @NoArgsConstructor
@@ -17,4 +17,9 @@ public class Division {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Department> departments;
+    @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> records;
 }

@@ -125,4 +125,23 @@ public class AdminController {
     public ResponseEntity<DepartmentGroup> AddDepartmentGroup(@RequestBody DepartmentGroup in) {
         return new ResponseEntity<>(departmentGroupRepo.save(in), HttpStatus.OK);
     }
+
+    @DeleteMapping("/api/admin/delete")
+    public ResponseEntity<?> delete(@RequestParam("table") String table, @RequestParam("id") String id) {
+        switch (table) {
+            case "Locations" -> locationRepo.findById(Long.parseLong(id)).ifPresent(x -> locationRepo.delete(x));
+            case "Groups" -> groupRepo.findById(Long.parseLong(id)).ifPresent(x -> groupRepo.delete(x));
+            case "Positions" -> positionRepo.findById(Long.parseLong(id)).ifPresent(x -> positionRepo.delete(x));
+            case "Divisions" -> divisionRepo.findById(Long.parseLong(id)).ifPresent(x -> divisionRepo.delete(x));
+            case "Departments" -> departmentRepo.findById(Long.parseLong(id)).ifPresent(x -> departmentRepo.delete(x));
+            case "Records" -> recordRepo.findById(id).ifPresent(x -> recordRepo.delete(x));
+            case "DepartmentsGroups" ->
+                    departmentGroupRepo.findById(Long.parseLong(id)).ifPresent(x -> departmentGroupRepo.delete(x));
+            case "PositionTypes" ->
+                    positionTypeRepo.findById(Long.parseLong(id)).ifPresent(x -> positionTypeRepo.delete(x));
+            case "Employees" -> employeeRepo.findById(Long.parseLong(id)).ifPresent(x -> employeeRepo.delete(x));
+            case "Entities" -> entityRepo.findById(Long.parseLong(id)).ifPresent(x -> entityRepo.delete(x));
+        }
+        return ResponseEntity.ok().build();
+    }
 }

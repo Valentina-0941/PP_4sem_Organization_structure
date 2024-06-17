@@ -5,6 +5,7 @@ import ft.root.entity.Record;
 import ft.root.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class GraphController {
     private DivisionRepository divisionRepo;
     private DepartmentGroupRepository departmentGroupRepo;
 
-    @GetMapping("/api/qwerty")
-    public List<CardPreviewInfo> getAllCardData() {
+    @GetMapping("/api/hierarchy")
+    public List<CardPreviewInfo> getAllCardData(@RequestParam(value = "base") String base) {
         List<CardPreviewInfo> infos = new ArrayList<>();
         for (Record r : recordRepo.findAll())
             infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));

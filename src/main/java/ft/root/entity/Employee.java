@@ -1,10 +1,10 @@
 package ft.root.entity;
 
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
+
+import java.util.List;
 
 @Entity(name = "employees")
 @NoArgsConstructor
@@ -19,6 +19,9 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String patronymic;
+
+    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Record records;
 
     public String getFullName() {
         String fullName = firstName;

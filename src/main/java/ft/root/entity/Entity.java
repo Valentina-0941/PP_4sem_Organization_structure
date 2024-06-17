@@ -1,9 +1,9 @@
 package ft.root.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @jakarta.persistence.Entity(name = "entities")
 @NoArgsConstructor
@@ -16,4 +16,7 @@ public class Entity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Record> records;
 }
