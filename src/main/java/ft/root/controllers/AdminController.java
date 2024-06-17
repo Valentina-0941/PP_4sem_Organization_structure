@@ -206,9 +206,8 @@ public class AdminController {
     }
 
     private void del(Iterable<Record> records) {
-        for (Record r : records) {
-            employeeRepo.delete(r.getEmployee());
-            recordRepo.delete(r);
-        }
+        //            Employee employee = r.getEmployee();
+        //            employeeRepo.delete(employee);
+        recordRepo.deleteAll(records);
     }
 }
