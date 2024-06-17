@@ -15,6 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="js/navigation.js"></script>
+    <script src="js/structure-categorize-script.js"></script>
 
     <style>
 
@@ -51,12 +52,6 @@
     <div class="w-100">
         <!--Сортировка по алфавиту-->
         <div class="my-3 mx-4">
-            <div class="btn btn-light px-4 show-vacant-positions" style="border-radius: 16px;">
-                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Вывести свободные должности</a>
-            </div>
-            <div class="sort btn btn-light px-4 sort" style="border-radius: 16px;">
-                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Сортировка</a>
-            </div>
             <div class="btn btn-light search" style="border-radius: 16px;">
                 <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#" id="openModalBtn">
                     <img src="source/icon/fi-rr-search.svg" alt="Поиск" style="width: 16px;">
@@ -65,7 +60,7 @@
         </div>
         <!--Поиск-->
         <div class="filter-box d-flex gap-3 my-4 mx-4"></div>
-        <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards"></div>
+        <div class="my-4 mx-4" id="employeeCards"></div>
     </div>
 
     <!--Информация о сотруднике -->

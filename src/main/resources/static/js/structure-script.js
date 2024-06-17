@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const data = await resp.json();
         updateOffcanvasContent(data);
     });
+    
 
     // Функция для сортировки карточек
     function sortCards(order) {
