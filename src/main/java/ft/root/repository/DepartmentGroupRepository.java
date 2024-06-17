@@ -9,4 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DepartmentGroupRepository extends CrudRepository<DepartmentGroup, Long> {
     DepartmentGroup findByDepartmentAndGroup(Department department, Group group);
+
+    DepartmentGroup findByDepartment(Department department);
+
+    DepartmentGroup findByGroup(Group group);
 }

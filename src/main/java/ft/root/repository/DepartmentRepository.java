@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DepartmentRepository extends CrudRepository<Department, Long> {
-    Department findByDivision_Name(String name);
-
     Department findByNameAndDivision(String name, Division division);
+
+    Department findByName(String name);
+
+    Department findByDivision(Division division);
 }

@@ -2,7 +2,6 @@ HELP.md
 target/
 node_modules/
 src/main/resources/static/js/d3.v7.js
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -16,7 +15,7 @@ src/main/resources/static/js/d3.v7.js
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+#.idea
 *.iws
 *.iml
 *.ipr
