@@ -39,11 +39,9 @@ public class CSVInitController {
     }
 
     private void saveOrUpdateData(String[] row) {
-        boolean empty = true;
+        if (row[0] == null || row[0].isBlank() || row[0].isEmpty()) return;
         for (int i = 0; i < row.length; i++)
             if (row[i] == null || row[i].isEmpty() || row[i].isBlank()) row[i] = "n/a";
-            else empty = false;
-        if (empty) return;
         Employee employee = parseEmployee(row[7]);
         Entity entity = parseEntity(row[1]);
         PositionType positionType = parsePositionType(row[8]);
