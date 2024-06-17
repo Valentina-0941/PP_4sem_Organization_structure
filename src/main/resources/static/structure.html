@@ -13,6 +13,7 @@
             crossorigin="anonymous"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="js/navigation.js"></script>
     <script src="js/structure-script.js"></script>
 
@@ -96,9 +97,7 @@
     <!--Боковая панель навигации-->
     <header class="">
         <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary position-fixed" style="height: 100vh;">
-            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto" id="navigation">
-
-            </ul>
+            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto" id="navigation"></ul>
             <div class="dropdown border-top">
                 <a href="#"
                    class="d-flex align-items-center justify-content-center py-3 link-body-emphasis text-decoration-none dropdown-toggle"
@@ -147,6 +146,7 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
+            <p id="offcanvasContent">Содержимое Offcanvas</p>
         </div>
     </div>
 

@@ -28,7 +28,7 @@ public class GraphController {
     public List<CardPreviewInfo> getAllCardData() {
         List<CardPreviewInfo> infos = new ArrayList<>();
         for (Record r : recordRepo.findAll())
-            infos.add(new CardPreviewInfo(r.getEmployee(), r.getPosition()));
+            infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));
         return infos;
     }
 }
