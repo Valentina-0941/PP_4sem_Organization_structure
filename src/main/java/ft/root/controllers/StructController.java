@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -68,5 +69,13 @@ public class StructController {
         for (Record r : recordRepo.findByEmployeeNull())
             infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));
         return infos;
+    }
+
+    @GetMapping("/api/filter")
+    public List<CardPreviewInfo> getFiltered(@RequestParam Map<String, String> params) {
+        for (Map.Entry<String, String> pair : params.entrySet()) {
+            System.out.println("key: " + pair.getKey() + " | value" + pair.getValue());
+        }
+        return new ArrayList<>();
     }
 }
