@@ -125,7 +125,7 @@ public class AdminController {
         return new ResponseEntity<>(departmentGroupRepo.save(in), HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/admin/delete")
+    @GetMapping("/api/admin/delete")
     public ResponseEntity<?> delete(@RequestParam("table") String table, @RequestParam("id") String id) {
         switch (table) {
             case "Divisions" -> {
