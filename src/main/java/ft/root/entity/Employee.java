@@ -19,4 +19,11 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String patronymic;
+
+    public String getFullName() {
+        String fullName = firstName;
+        if (!lastName.equals("n/a")) fullName += " " + lastName;
+        if (!patronymic.equals("n/a")) fullName += " " + patronymic;
+        return fullName;
+    }
 }
