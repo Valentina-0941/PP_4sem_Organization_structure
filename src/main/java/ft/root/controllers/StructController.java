@@ -61,4 +61,12 @@ public class StructController {
 
         return info;
     }
+
+    @GetMapping("/api/getAllFree")
+    public List<CardPreviewInfo> getAllFree() {
+        List<CardPreviewInfo> infos = new ArrayList<>();
+        for (Record r : recordRepo.findByEmployeeNull())
+            infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));
+        return infos;
+    }
 }
