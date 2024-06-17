@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const navItems = [
         {
             href: "index.html",
@@ -27,6 +27,12 @@ document.addEventListener("DOMContentLoaded", function() {
         {
             href: "help.html",
             tooltip: "Помощь",
+            imgSrc: "source/icon/fi-rr-question-square.svg",
+            imgAlt: "question icon"
+        },
+        {
+            href: "admin.html",
+            tooltip: "Admin",
             imgSrc: "source/icon/fi-rr-question-square.svg",
             imgAlt: "question icon"
         }

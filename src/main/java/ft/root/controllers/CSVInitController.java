@@ -31,7 +31,7 @@ public class CSVInitController {
         try (CSVReader reader = new CSVReader(new FileReader("data.csv"))) {
             reader.skip(1);
             reader.forEach(this::saveOrUpdateData);
-            return "redirect:/";
+            return "redirect:index.html";
         } catch (IOException e) {
             e.printStackTrace();
             return "Error";

@@ -1,4 +1,5 @@
 const dataUrl = 'data.json';
+
 d3.json(dataUrl).then(data => {
     var element = document.getElementById("chart");
     const width = element.offsetWidth;
@@ -48,7 +49,7 @@ d3.json(dataUrl).then(data => {
         .attr("r", 5)
         .attr("fill", color)
         .on("click", clicked)
-        .on("mouseover", function(event, d) {
+        .on("mouseover", function (event, d) {
             const childrenInfo = getChildrenInfo(d);
             tooltip.transition()
                 .duration(200);
@@ -56,7 +57,7 @@ d3.json(dataUrl).then(data => {
                 .style("left", (event.pageX + 5) + "px")
                 .style("top", (event.pageY - 28) + "px");
         })
-        .on("mouseout", function() {
+        .on("mouseout", function () {
             tooltip.transition()
                 .duration(500);
         });
@@ -121,6 +122,7 @@ d3.json(dataUrl).then(data => {
             update();
         }
     }
+
     function getChildrenInfo(d) {
         if (!d.children) {
             return `<strong>${d.data.name}</strong><br>
@@ -150,7 +152,7 @@ d3.json(dataUrl).then(data => {
             .attr("r", 5)
             .attr("fill", color)
             .on("click", clicked)
-            .on("mouseover", function(event, d) {
+            .on("mouseover", function (event, d) {
                 const childrenInfo = getChildrenInfo(d);
                 tooltip.transition()
                     .duration(200);
@@ -158,7 +160,7 @@ d3.json(dataUrl).then(data => {
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
-            .on("mouseout", function() {
+            .on("mouseout", function () {
                 tooltip.transition()
                     .duration(500);
             });
@@ -179,9 +181,8 @@ d3.json(dataUrl).then(data => {
     }
 
 
-
     // Добавляем обработчик события на кнопку "Отобразить все элементы"
-    document.getElementById("showAllButton").addEventListener("click", function() {
+    document.getElementById("showAllButton").addEventListener("click", function () {
         // Показываем модальное окно
         var alertModal = new bootstrap.Modal(document.getElementById('alertModal'), {
             keyboard: false // Запрещаем закрытие по нажатию клавиши Esc
@@ -190,7 +191,7 @@ d3.json(dataUrl).then(data => {
     });
 
 // Обработчик для кнопки подтверждения в модальном окне
-    document.getElementById('confirmShowAll').addEventListener('click', function() {
+    document.getElementById('confirmShowAll').addEventListener('click', function () {
         // Закрываем модальное окно
         var alertModal = bootstrap.Modal.getInstance(document.getElementById('alertModal'));
         alertModal.hide();
@@ -255,7 +256,7 @@ d3.json(dataUrl).then(data => {
             .attr("r", 5)
             .attr("fill", color)
             .on("click", clicked)
-            .on("mouseover", function(event, d) {
+            .on("mouseover", function (event, d) {
                 const childrenInfo = getChildrenInfo(d);
                 tooltip.transition()
                     .duration(200);
@@ -263,7 +264,7 @@ d3.json(dataUrl).then(data => {
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
-            .on("mouseout", function() {
+            .on("mouseout", function () {
                 tooltip.transition()
                     .duration(500);
             });

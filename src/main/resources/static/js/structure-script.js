@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
     // const jsonFilePath = '/data.json'; // Путь к вашему JSON файлу
 
-    const serverResponse = await fetch(`/api/getRecords`);
+    const serverResponse = await fetch(`/api/getAllCardData`);
     const cardInfos = await serverResponse.json();
     console.log(cardInfos);
 

@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CardPreviewInfo {
+    private String recordId;
     private Employee employee;
     private Position position;
 }

@@ -1,10 +1,14 @@
 package ft.root.controllers;
 
 import ft.root.dto.CardPreviewInfo;
+import ft.root.dto.ExtendedCardInfo;
+import ft.root.entity.DepartmentGroup;
+import ft.root.entity.Position;
 import ft.root.entity.Record;
 import ft.root.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -28,7 +32,26 @@ public class StructController {
     public List<CardPreviewInfo> getAllCardData() {
         List<CardPreviewInfo> infos = new ArrayList<>();
         for (Record r : recordRepo.findAll())
-            infos.add(new CardPreviewInfo(r.getEmployee(), r.getPosition()));
+            infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));
         return infos;
+    }
+
+    @GetMapping("/api/getAllInfo")
+    public ExtendedCardInfo getExtendedInfo(@RequestParam(value = "id") String id) {
+        Record record = recordRepo.findById(id).orElse(null);
+        if (record == null) return null;
+        DepartmentGroup dg = record.getDepartmentGroup();
+        Position pos = record.getPosition();
+        return new ExtendedCardInfo(
+                record.getId(),
+                record.getEntity().getName(),
+                record.getLocation().getName(),
+                record.getDivision().getName(),
+                dg.getDepartment().getName(),
+                dg.getGroup().getName(),
+                pos.getType().getName(),
+                pos.getName(),
+                record.getEmployee().getFullName()
+        );
     }
 }
