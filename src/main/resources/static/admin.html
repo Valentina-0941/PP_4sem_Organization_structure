@@ -12,8 +12,9 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
 
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/admin-script.js"></script>
     <style>
         header {
             width: 55px;
@@ -40,24 +41,26 @@
         <select id="tableSelect" class="form-select my-2" aria-label="Default select example">
             <option selected>Выберите таблицу...</option>
             <option value="Departments">Departments</option>
-            <option value="Departments_groups">Departments_groups</option>
+            <option value="DepartmentsGroups">Departments groups</option>
             <option value="Divisions">Divisions</option>
             <option value="Employees">Employees</option>
             <option value="Entities">Entities</option>
             <option value="Groups">Groups</option>
             <option value="Locations">Locations</option>
-            <option value="Position_types">Position_types</option>
+            <option value="PositionTypes">Position types</option>
             <option value="Positions">Positions</option>
             <option value="Records">Records</option>
         </select>
-        <button class="btn btn-primary mx-2">Загрузить</button>
+        <button class="btn btn-primary mx-2" onclick="loadTable()">Загрузить</button>
+        <button class="btn btn-primary mx-2 align-items-center" data-bs-toggle="modal" data-bs-target="#newItemModal" onclick="add()">
+            <img src="source/icon/fi-rr-plus.svg" style="width: 16px;">
+        </button>
     </div>
 
-    <h2>Section title</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-            <tr>
+            <tr id="data-table-head">
                 <th>#</th>
             </tr>
             </thead>
@@ -66,9 +69,6 @@
         </table>
     </div>
 </main>
-
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous"></script>
-<script src="js/script.js"></script>
+<!--<script src="js/script.js"></script>-->
 </body>
 </html>

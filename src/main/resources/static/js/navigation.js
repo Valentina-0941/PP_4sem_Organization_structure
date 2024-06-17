@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
             href: "admin.html",
             tooltip: "Admin",
-            imgSrc: "source/icon/fi-rr-question-square.svg",
+            imgSrc: "source/icon/fi-rr-admin.svg",
             imgAlt: "question icon"
         }
     ];

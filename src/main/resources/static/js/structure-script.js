@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const serverResponse = await fetch(`/api/getAllCardData`);
     const cardInfos = await serverResponse.json();
-
     let sortingOrder = '';
     let originalOrder = [];
 
