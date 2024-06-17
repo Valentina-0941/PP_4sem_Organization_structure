@@ -130,59 +130,61 @@ public class AdminController {
         switch (table) {
             case "Divisions" -> {
                 Division d = divisionRepo.findById(Long.parseLong(id)).orElse(null);
+                del(recordRepo.findByDivision(d));
                 if (d == null) return ResponseEntity.notFound().build();
-                divisionRepo.delete(d);
                 for (Department department : departmentRepo.findByDivision(d)) {
-                    departmentRepo.delete(department);
                     for (DepartmentGroup dg : departmentGroupRepo.findByDepartment(department)) {
-                        departmentGroupRepo.delete(dg);
                         del(recordRepo.findByDepartmentGroup(dg));
+                        departmentGroupRepo.delete(dg);
                     }
+                    departmentRepo.delete(department);
                 }
+                divisionRepo.delete(d);
             }
             case "Departments" -> {
                 Department d = departmentRepo.findById(Long.parseLong(id)).orElse(null);
                 if (d == null) return ResponseEntity.notFound().build();
-                departmentRepo.delete(d);
                 for (DepartmentGroup dg : departmentGroupRepo.findByDepartment(d)) {
-                    departmentGroupRepo.delete(dg);
                     del(recordRepo.findByDepartmentGroup(dg));
+                    departmentGroupRepo.delete(dg);
                 }
+                departmentRepo.delete(d);
             }
             case "Groups" -> {
                 Group g = groupRepo.findById(Long.parseLong(id)).orElse(null);
                 if (g == null) return ResponseEntity.notFound().build();
-                groupRepo.delete(g);
                 for (DepartmentGroup dg : departmentGroupRepo.findByGroup(g)) {
-                    departmentGroupRepo.delete(dg);
                     del(recordRepo.findByDepartmentGroup(dg));
+                    departmentGroupRepo.delete(dg);
                 }
+                groupRepo.delete(g);
             }
             case "DepartmentsGroups" -> {
                 DepartmentGroup dg = departmentGroupRepo.findById(Long.parseLong(id)).orElse(null);
                 if (dg == null) return ResponseEntity.notFound().build();
-                departmentGroupRepo.delete(dg);
                 del(recordRepo.findByDepartmentGroup(dg));
+                departmentGroupRepo.delete(dg);
             }
             case "Locations" -> {
                 Location location = locationRepo.findById(Long.parseLong(id)).orElse(null);
                 if (location == null) return ResponseEntity.notFound().build();
-                locationRepo.delete(location);
                 del(recordRepo.findByLocation(location));
+                locationRepo.delete(location);
             }
             case "PositionTypes" -> {
                 PositionType type = positionTypeRepo.findById(Long.parseLong(id)).orElse(null);
                 if (type == null) return ResponseEntity.notFound().build();
-                positionTypeRepo.delete(type);
                 for (Position p : positionRepo.findByType(type)) {
-                    positionRepo.delete(p);
                     del(recordRepo.findByPosition(p));
+                    positionRepo.delete(p);
                 }
+                positionTypeRepo.delete(type);
             }
             case "Positions" -> {
                 Position p = positionRepo.findById(Long.parseLong(id)).orElse(null);
                 if (p == null) return ResponseEntity.notFound().build();
                 del(recordRepo.findByPosition(p));
+                positionRepo.delete(p);
             }
             case "Employees" -> {
                 Employee employee = employeeRepo.findById(Long.parseLong(id)).orElse(null);
@@ -194,8 +196,8 @@ public class AdminController {
             case "Entities" -> {
                 Entity entity = entityRepo.findById(Long.parseLong(id)).orElse(null);
                 if (entity == null) return ResponseEntity.notFound().build();
-                entityRepo.delete(entity);
                 del(recordRepo.findByEntity(entity));
+                entityRepo.delete(entity);
             }
             case "Records" -> recordRepo.findById(id).ifPresent(x -> recordRepo.delete(x));
         }
