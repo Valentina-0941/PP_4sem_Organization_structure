@@ -1,7 +1,7 @@
 package ft.root.controllers;
 
-import ft.root.entity.*;
 import ft.root.entity.Record;
+import ft.root.entity.*;
 import ft.root.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @AllArgsConstructor

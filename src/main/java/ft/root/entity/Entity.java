@@ -17,6 +17,4 @@ public class Entity {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Record> records;
 }

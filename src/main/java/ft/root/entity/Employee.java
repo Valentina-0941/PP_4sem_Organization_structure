@@ -20,9 +20,6 @@ public class Employee {
     private String lastName;
     private String patronymic;
 
-    @OneToOne(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Record records;
-
     public String getFullName() {
         String fullName = firstName;
         if (!lastName.equals("n/a")) fullName += " " + lastName;

@@ -20,7 +20,4 @@ public class Department {
     @ManyToOne
     @JoinColumn(name = "division_id")
     private Division division;
-
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DepartmentGroup> departmentGroups;
 }

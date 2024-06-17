@@ -21,7 +21,4 @@ public class Position {
     @ManyToOne
     @JoinColumn(name = "type_id")
     private PositionType type;
-
-    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Record> records;
 }

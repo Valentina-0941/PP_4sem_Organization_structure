@@ -17,9 +17,4 @@ public class Division {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Department> departments;
-    @OneToMany(mappedBy = "division", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Record> records;
 }

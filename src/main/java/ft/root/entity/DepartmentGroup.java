@@ -22,7 +22,4 @@ public class DepartmentGroup {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
-
-    @OneToMany(mappedBy = "departmentGroup", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Record> records;
 }
