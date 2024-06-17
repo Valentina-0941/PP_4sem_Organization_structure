@@ -2,15 +2,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     // const jsonFilePath = '/data.json'; // Путь к вашему JSON файлу
 
     const serverResponse = await fetch(`/api/getRecords`);
-    const data = await serverResponse.json();
-
-    console.log("TEST")
-    console.log(data[801].employee.firstName)
-    console.log(data);
+    const cardInfos = await serverResponse.json();
+    console.log(cardInfos);
 
 
-    let isCategorized = false; // Флаг для отслеживания состояния категорий
-    let sortingOrder = '';
+    // let isCategorized = false; // Флаг для отслеживания состояния категорий
+    // let sortingOrder = '';
 
 
     // Функция для создания карточки сотрудника
@@ -68,97 +65,97 @@ document.addEventListener('DOMContentLoaded', async function () {
             uncategorizedContainer.appendChild(card);
         });
 
-        // if (categorized) {
-        //     let collapseIdCounter = 1;
-        //     data.children.forEach(yurFace => {
-        //         const yurFaceCollapseId = 'collapseYurFace' + collapseIdCounter++;
-        //         const yurFaceHeader = createCategoryHeader(yurFace.name, yurFaceCollapseId, 1); // Уровень 1
-        //         cardsContainer.appendChild(yurFaceHeader);
-        //         const yurFaceContainer = yurFaceHeader.querySelector(`#${yurFaceCollapseId}`);
-        //
-        //         yurFace.children.forEach(location => {
-        //             const locationCollapseId = 'collapseLocation' + collapseIdCounter++;
-        //             const locationHeader = createCategoryHeader(location.name, locationCollapseId, 2); // Уровень 2
-        //             yurFaceContainer.appendChild(locationHeader);
-        //             const locationContainer = locationHeader.querySelector(`#${locationCollapseId}`);
-        //
-        //             location.children.forEach(subdivision => {
-        //                 const subdivisionCollapseId = 'collapseSubdivision' + collapseIdCounter++;
-        //                 const subdivisionHeader = createCategoryHeader(subdivision.name, subdivisionCollapseId, 3); // Уровень 3
-        //                 locationContainer.appendChild(subdivisionHeader);
-        //                 const subdivisionContainer = subdivisionHeader.querySelector(`#${subdivisionCollapseId}`);
-        //
-        //                 subdivision.children.forEach(department => {
-        //                     const departmentCollapseId = 'collapseDepartment' + collapseIdCounter++;
-        //                     const departmentHeader = createCategoryHeader(department.name, departmentCollapseId, 4); // Уровень 4
-        //                     subdivisionContainer.appendChild(departmentHeader);
-        //                     const departmentContainer = departmentHeader.querySelector(`#${departmentCollapseId}`);
-        //
-        //                     department.children.forEach(group => {
-        //                         const groupCollapseId = 'collapseGroup' + collapseIdCounter++;
-        //                         const groupHeader = createCategoryHeader(group.name, groupCollapseId, 5); // Уровень 5
-        //                         departmentContainer.appendChild(groupHeader);
-        //                         const groupContainer = document.createElement('div');
-        //                         groupContainer.classList.add('cards', 'd-flex', 'row', 'gap-3', 'my-4', 'mx-2');
-        //                         groupHeader.querySelector(`#${groupCollapseId}`).appendChild(groupContainer);
-        //
-        //                         group.children.forEach(position => {
-        //                             const card = createEmployeeCard({
-        //                                 name: position.name,
-        //                                 fio: position.children[0].fio,
-        //                                 job_type: position.children[0].job_type,
-        //                                 pos_number: position.children[0].pos_number,
-        //                                 yurFace: yurFace.name,
-        //                                 location: location.name,
-        //                                 subdivision: subdivision.name,
-        //                                 department: department.name,
-        //                                 group: group.name
-        //                             });
-        //                             groupContainer.appendChild(card);
-        //                         });
-        //                     });
-        //                 });
-        //             });
-        //         });
-        //     });
-        // } else {
-        //     const uncategorizedContainer = document.createElement('div');
-        //     uncategorizedContainer.classList.add('cards', 'd-flex', 'row', 'gap-3', 'my-4', 'mx-2');
-        //     cardsContainer.appendChild(uncategorizedContainer);
-        //
-        //     const sortedData = sortEmployeesAlphabetically(data.children);
-        //
-        //
-        //     data.forEach(record => {
-        //         const card = createEmployeeCard(record);
-        //         uncategorizedContainer.appendChild(card);
-        //     });
-        //
-        //     // sortedData.forEach(yurFace => {
-        //     //     yurFace.children.forEach(location => {
-        //     //         location.children.forEach(subdivision => {
-        //     //             subdivision.children.forEach(department => {
-        //     //                 department.children.forEach(group => {
-        //     //                     group.children.forEach(position => {
-        //     //                         const card = createEmployeeCard({
-        //     //                             name: position.name,
-        //     //                             fio: position.children[0].fio,
-        //     //                             job_type: position.children[0].job_type,
-        //     //                             pos_number: position.children[0].pos_number,
-        //     //                             yurFace: yurFace.name,
-        //     //                             location: location.name,
-        //     //                             subdivision: subdivision.name,
-        //     //                             department: department.name,
-        //     //                             group: group.name
-        //     //                         });
-        //     //                         uncategorizedContainer.appendChild(card);
-        //     //                     });
-        //     //                 });
-        //     //             });
-        //     //         });
-        //     //     });
-        //     // });
-        // }
+        if (categorized) {
+            let collapseIdCounter = 1;
+            data.children.forEach(yurFace => {
+                const yurFaceCollapseId = 'collapseYurFace' + collapseIdCounter++;
+                const yurFaceHeader = createCategoryHeader(yurFace.name, yurFaceCollapseId, 1); // Уровень 1
+                cardsContainer.appendChild(yurFaceHeader);
+                const yurFaceContainer = yurFaceHeader.querySelector(`#${yurFaceCollapseId}`);
+
+                yurFace.children.forEach(location => {
+                    const locationCollapseId = 'collapseLocation' + collapseIdCounter++;
+                    const locationHeader = createCategoryHeader(location.name, locationCollapseId, 2); // Уровень 2
+                    yurFaceContainer.appendChild(locationHeader);
+                    const locationContainer = locationHeader.querySelector(`#${locationCollapseId}`);
+
+                    location.children.forEach(subdivision => {
+                        const subdivisionCollapseId = 'collapseSubdivision' + collapseIdCounter++;
+                        const subdivisionHeader = createCategoryHeader(subdivision.name, subdivisionCollapseId, 3); // Уровень 3
+                        locationContainer.appendChild(subdivisionHeader);
+                        const subdivisionContainer = subdivisionHeader.querySelector(`#${subdivisionCollapseId}`);
+
+                        subdivision.children.forEach(department => {
+                            const departmentCollapseId = 'collapseDepartment' + collapseIdCounter++;
+                            const departmentHeader = createCategoryHeader(department.name, departmentCollapseId, 4); // Уровень 4
+                            subdivisionContainer.appendChild(departmentHeader);
+                            const departmentContainer = departmentHeader.querySelector(`#${departmentCollapseId}`);
+
+                            department.children.forEach(group => {
+                                const groupCollapseId = 'collapseGroup' + collapseIdCounter++;
+                                const groupHeader = createCategoryHeader(group.name, groupCollapseId, 5); // Уровень 5
+                                departmentContainer.appendChild(groupHeader);
+                                const groupContainer = document.createElement('div');
+                                groupContainer.classList.add('cards', 'd-flex', 'row', 'gap-3', 'my-4', 'mx-2');
+                                groupHeader.querySelector(`#${groupCollapseId}`).appendChild(groupContainer);
+
+                                group.children.forEach(position => {
+                                    const card = createEmployeeCard({
+                                        name: position.name,
+                                        fio: position.children[0].fio,
+                                        job_type: position.children[0].job_type,
+                                        pos_number: position.children[0].pos_number,
+                                        yurFace: yurFace.name,
+                                        location: location.name,
+                                        subdivision: subdivision.name,
+                                        department: department.name,
+                                        group: group.name
+                                    });
+                                    groupContainer.appendChild(card);
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        } else {
+            const uncategorizedContainer = document.createElement('div');
+            uncategorizedContainer.classList.add('cards', 'd-flex', 'row', 'gap-3', 'my-4', 'mx-2');
+            cardsContainer.appendChild(uncategorizedContainer);
+
+            const sortedData = sortEmployeesAlphabetically(data.children);
+
+
+            data.forEach(record => {
+                const card = createEmployeeCard(record);
+                uncategorizedContainer.appendChild(card);
+            });
+
+            sortedData.forEach(yurFace => {
+                yurFace.children.forEach(location => {
+                    location.children.forEach(subdivision => {
+                        subdivision.children.forEach(department => {
+                            department.children.forEach(group => {
+                                group.children.forEach(position => {
+                                    const card = createEmployeeCard({
+                                        name: position.name,
+                                        fio: position.children[0].fio,
+                                        job_type: position.children[0].job_type,
+                                        pos_number: position.children[0].pos_number,
+                                        yurFace: yurFace.name,
+                                        location: location.name,
+                                        subdivision: subdivision.name,
+                                        department: department.name,
+                                        group: group.name
+                                    });
+                                    uncategorizedContainer.appendChild(card);
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }
     }
 
     // Функция для блокировки/разблокировки кнопок

@@ -1,10 +1,14 @@
 package ft.root.controllers;
 
+import ft.root.dto.CardPreviewInfo;
 import ft.root.entity.Record;
 import ft.root.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -20,8 +24,11 @@ public class StructController {
     private DivisionRepository divisionRepo;
     private DepartmentGroupRepository departmentGroupRepo;
 
-    @GetMapping("/api/getRecords")
-    public Iterable<Record> index() {
-        return recordRepo.findAll();
+    @GetMapping("/api/getAllCardData")
+    public List<CardPreviewInfo> getAllCardData() {
+        List<CardPreviewInfo> infos = new ArrayList<>();
+        for (Record r : recordRepo.findAll())
+            infos.add(new CardPreviewInfo(r.getEmployee(), r.getPosition()));
+        return infos;
     }
 }
