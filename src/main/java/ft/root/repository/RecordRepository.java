@@ -22,4 +22,6 @@ public interface RecordRepository extends CrudRepository<Record, String> {
     List<Record> findByPosition(Position position);
 
     List<Record> findByDepartmentGroup(DepartmentGroup departmentGroup);
+
+    List<Record> findByDivision(Division division);
 }
