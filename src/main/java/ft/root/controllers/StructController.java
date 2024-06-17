@@ -2,6 +2,7 @@ package ft.root.controllers;
 
 import ft.root.dto.CardPreviewInfo;
 import ft.root.dto.ExtendedCardInfo;
+import ft.root.dto.IntStringPair;
 import ft.root.entity.DepartmentGroup;
 import ft.root.entity.Position;
 import ft.root.entity.Record;
@@ -73,45 +74,53 @@ public class StructController {
     public List<CardPreviewInfo> getFiltered(@RequestBody Map<String, String> params) {
         Iterable<Record> records = recordRepo.findAll();
         List<CardPreviewInfo> infos = new ArrayList<>();
+        String v;
         for (Record r : records) {
             boolean isValid = true;
-            for (Map.Entry<String, String> pair : params.entrySet()) {
-                switch (pair.getKey()) {
+            for (String key : params.keySet()) {
+                v = params.get(key);
+                switch (key) {
                     case "entity" -> {
-                        if (r.getEntity() == null || !r.getEntity().getName().equals(pair.getValue())) isValid = false;
+                        if (r.getEntity() == null || !r.getEntity().getName().equals(v)) isValid = false;
                     }
                     case "location" -> {
-                        if (r.getLocation() == null || !r.getLocation().getName().equals(pair.getValue()))
+                        if (r.getLocation() == null || !r.getLocation().getName().equals(v))
                             isValid = false;
                     }
                     case "division" -> {
-                        if (r.getDivision() == null || !r.getDivision().getName().equals(pair.getValue()))
+                        if (r.getDivision() == null || !r.getDivision().getName().equals(v))
                             isValid = false;
                     }
                     case "department" -> {
-                        if (r.getDepartmentGroup() == null || !r.getDepartmentGroup().getDepartment().getName().equals(pair.getValue()))
+                        if (r.getDepartmentGroup() == null || !r.getDepartmentGroup().getDepartment().getName().equals(v))
                             isValid = false;
                     }
                     case "group" -> {
-                        if (r.getDepartmentGroup() == null || !r.getDepartmentGroup().getGroup().getName().equals(pair.getValue()))
+                        if (r.getDepartmentGroup() == null || !r.getDepartmentGroup().getGroup().getName().equals(v))
                             isValid = false;
                     }
                     case "position" -> {
-                        if (r.getPosition() == null || !r.getPosition().getName().equals(pair.getValue()))
+                        if (r.getPosition() == null || !r.getPosition().getName().equals(v))
                             isValid = false;
                     }
                     case "fullName" -> {
-                        if (r.getEmployee() == null || !r.getEmployee().getFullName().equals(pair.getValue()))
+                        if (r.getEmployee() == null || !r.getEmployee().getFullName().equals(v))
                             isValid = false;
                     }
                     case "type" -> {
-                        if (r.getPosition() == null || !r.getPosition().getType().getName().equals(pair.getValue()))
+                        if (r.getPosition() == null || !r.getPosition().getType().getName().equals(v))
                             isValid = false;
                     }
                 }
+
             }
             if (isValid) infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));
         }
         return infos;
+    }
+
+    @GetMapping("/api/getAllTable")
+    public List<IntStringPair> getAllTable(@RequestParam(value = "name") String name) {
+        return new ArrayList<>();
     }
 }
