@@ -6,11 +6,13 @@ import ft.root.entity.Group;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DepartmentGroupRepository extends CrudRepository<DepartmentGroup, Long> {
     DepartmentGroup findByDepartmentAndGroup(Department department, Group group);
 
-    DepartmentGroup findByDepartment(Department department);
+    List<DepartmentGroup> findByGroup(Group group);
 
-    DepartmentGroup findByGroup(Group group);
+    List<DepartmentGroup> findByDepartment(Department department);
 }

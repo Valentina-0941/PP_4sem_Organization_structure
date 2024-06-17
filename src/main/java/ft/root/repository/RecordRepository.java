@@ -1,32 +1,25 @@
 package ft.root.repository;
 
-import ft.root.entity.Record;
 import ft.root.entity.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
+import ft.root.entity.Record;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface RecordRepository extends CrudRepository<Record, String> {
+    List<Record> findByEmployeeNull();
+
+    List<Record> findByLocation(Location location);
+
+    List<Record> findByEntity(Entity entity);
+
     Record findByEmployee(Employee employee);
 
-    Record findByEntity(Entity entity);
+    long deleteByEmployee(Employee employee);
 
-    Record findByPosition(Position position);
+    List<Record> findByPosition(Position position);
 
-    Record findByLocation(Location location);
-
-    Record findByDepartmentGroup(DepartmentGroup departmentGroup);
-
-    Record findByDivision(Division division);
-
-    List<Record> findByEmployeeNull();
+    List<Record> findByDepartmentGroup(DepartmentGroup departmentGroup);
 }

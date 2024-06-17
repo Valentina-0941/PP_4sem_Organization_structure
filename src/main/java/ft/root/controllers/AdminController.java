@@ -128,19 +128,85 @@ public class AdminController {
     @DeleteMapping("/api/admin/delete")
     public ResponseEntity<?> delete(@RequestParam("table") String table, @RequestParam("id") String id) {
         switch (table) {
-            case "Locations" -> locationRepo.findById(Long.parseLong(id)).ifPresent(x -> locationRepo.delete(x));
-            case "Groups" -> groupRepo.findById(Long.parseLong(id)).ifPresent(x -> groupRepo.delete(x));
-            case "Positions" -> positionRepo.findById(Long.parseLong(id)).ifPresent(x -> positionRepo.delete(x));
-            case "Divisions" -> divisionRepo.findById(Long.parseLong(id)).ifPresent(x -> divisionRepo.delete(x));
-            case "Departments" -> departmentRepo.findById(Long.parseLong(id)).ifPresent(x -> departmentRepo.delete(x));
+            case "Divisions" -> {
+                Division d = divisionRepo.findById(Long.parseLong(id)).orElse(null);
+                if (d == null) return ResponseEntity.notFound().build();
+                divisionRepo.delete(d);
+                for (Department department : departmentRepo.findByDivision(d)) {
+                    departmentRepo.delete(department);
+                    for (DepartmentGroup dg : departmentGroupRepo.findByDepartment(department)) {
+                        departmentGroupRepo.delete(dg);
+                        del(recordRepo.findByDepartmentGroup(dg));
+                    }
+                }
+            }
+            case "Departments" -> {
+                Department d = departmentRepo.findById(Long.parseLong(id)).orElse(null);
+                if (d == null) return ResponseEntity.notFound().build();
+                departmentRepo.delete(d);
+                for (DepartmentGroup dg : departmentGroupRepo.findByDepartment(d)) {
+                    departmentGroupRepo.delete(dg);
+                    del(recordRepo.findByDepartmentGroup(dg));
+                }
+            }
+            case "Groups" -> {
+                Group g = groupRepo.findById(Long.parseLong(id)).orElse(null);
+                if (g == null) return ResponseEntity.notFound().build();
+                groupRepo.delete(g);
+                for (DepartmentGroup dg : departmentGroupRepo.findByGroup(g)) {
+                    departmentGroupRepo.delete(dg);
+                    del(recordRepo.findByDepartmentGroup(dg));
+                }
+            }
+            case "DepartmentsGroups" -> {
+                DepartmentGroup dg = departmentGroupRepo.findById(Long.parseLong(id)).orElse(null);
+                if (dg == null) return ResponseEntity.notFound().build();
+                departmentGroupRepo.delete(dg);
+                del(recordRepo.findByDepartmentGroup(dg));
+            }
+            case "Locations" -> {
+                Location location = locationRepo.findById(Long.parseLong(id)).orElse(null);
+                if (location == null) return ResponseEntity.notFound().build();
+                locationRepo.delete(location);
+                del(recordRepo.findByLocation(location));
+            }
+            case "Positions" -> {
+                Position p = positionRepo.findById(Long.parseLong(id)).orElse(null);
+                if (p == null) return ResponseEntity.notFound().build();
+                del(recordRepo.findByPosition(p));
+            }
             case "Records" -> recordRepo.findById(id).ifPresent(x -> recordRepo.delete(x));
-            case "DepartmentsGroups" ->
-                    departmentGroupRepo.findById(Long.parseLong(id)).ifPresent(x -> departmentGroupRepo.delete(x));
-            case "PositionTypes" ->
-                    positionTypeRepo.findById(Long.parseLong(id)).ifPresent(x -> positionTypeRepo.delete(x));
-            case "Employees" -> employeeRepo.findById(Long.parseLong(id)).ifPresent(x -> employeeRepo.delete(x));
-            case "Entities" -> entityRepo.findById(Long.parseLong(id)).ifPresent(x -> entityRepo.delete(x));
+            case "PositionTypes" -> {
+                PositionType type = positionTypeRepo.findById(Long.parseLong(id)).orElse(null);
+                if (type == null) return ResponseEntity.notFound().build();
+                positionTypeRepo.delete(type);
+                for (Position p : positionRepo.findByType(type)) {
+                    positionRepo.delete(p);
+                    del(recordRepo.findByPosition(p));
+                }
+            }
+            case "Employees" -> {
+                Employee employee = employeeRepo.findById(Long.parseLong(id)).orElse(null);
+                if (employee == null) return ResponseEntity.notFound().build();
+                Record record = recordRepo.findByEmployee(employee);
+                record.setEmployee(null);
+                recordRepo.save(record);
+            }
+            case "Entities" -> {
+                Entity entity = entityRepo.findById(Long.parseLong(id)).orElse(null);
+                if (entity == null) return ResponseEntity.notFound().build();
+                entityRepo.delete(entity);
+                del(recordRepo.findByEntity(entity));
+            }
         }
+
         return ResponseEntity.ok().build();
+    }
+
+    private void del(Iterable<Record> records) {
+        for (Record r : records) {
+            employeeRepo.delete(r.getEmployee());
+            recordRepo.delete(r);
+        }
     }
 }
