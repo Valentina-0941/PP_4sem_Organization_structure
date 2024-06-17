@@ -3,6 +3,7 @@ package ft.root.controllers;
 import ft.root.dto.CardPreviewInfo;
 import ft.root.dto.ExtendedCardInfo;
 import ft.root.entity.DepartmentGroup;
+import ft.root.entity.Entity;
 import ft.root.entity.Position;
 import ft.root.entity.Record;
 import ft.root.repository.*;
@@ -40,18 +41,25 @@ public class StructController {
     public ExtendedCardInfo getExtendedInfo(@RequestParam(value = "id") String id) {
         Record record = recordRepo.findById(id).orElse(null);
         if (record == null) return null;
+
+        ExtendedCardInfo info = new ExtendedCardInfo();
+
+        if (record.getEntity() != null) info.setEntity(record.getEntity().getName());
+        if (record.getLocation() != null) info.setLocation(record.getLocation().getName());
+        if (record.getDivision() != null) info.setDivision(record.getDivision().getName());
+
         DepartmentGroup dg = record.getDepartmentGroup();
+        if (dg != null) {
+            info.setDepartment(dg.getDepartment().getName());
+            info.setGroup(dg.getGroup().getName());
+        }
         Position pos = record.getPosition();
-        return new ExtendedCardInfo(
-                record.getId(),
-                record.getEntity().getName(),
-                record.getLocation().getName(),
-                record.getDivision().getName(),
-                dg.getDepartment().getName(),
-                dg.getGroup().getName(),
-                pos.getType().getName(),
-                pos.getName(),
-                record.getEmployee().getFullName()
-        );
+        if (pos != null) {
+            info.setType(pos.getType().getName());
+            info.setPosition(pos.getName());
+        }
+        info.setFullName(record.getEmployee() != null ? record.getEmployee().getFullName() : "Вакансия");
+
+        return info;
     }
 }
