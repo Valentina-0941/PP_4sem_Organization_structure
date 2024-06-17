@@ -170,12 +170,6 @@ public class AdminController {
                 locationRepo.delete(location);
                 del(recordRepo.findByLocation(location));
             }
-            case "Positions" -> {
-                Position p = positionRepo.findById(Long.parseLong(id)).orElse(null);
-                if (p == null) return ResponseEntity.notFound().build();
-                del(recordRepo.findByPosition(p));
-            }
-            case "Records" -> recordRepo.findById(id).ifPresent(x -> recordRepo.delete(x));
             case "PositionTypes" -> {
                 PositionType type = positionTypeRepo.findById(Long.parseLong(id)).orElse(null);
                 if (type == null) return ResponseEntity.notFound().build();
@@ -184,6 +178,11 @@ public class AdminController {
                     positionRepo.delete(p);
                     del(recordRepo.findByPosition(p));
                 }
+            }
+            case "Positions" -> {
+                Position p = positionRepo.findById(Long.parseLong(id)).orElse(null);
+                if (p == null) return ResponseEntity.notFound().build();
+                del(recordRepo.findByPosition(p));
             }
             case "Employees" -> {
                 Employee employee = employeeRepo.findById(Long.parseLong(id)).orElse(null);
@@ -198,6 +197,7 @@ public class AdminController {
                 entityRepo.delete(entity);
                 del(recordRepo.findByEntity(entity));
             }
+            case "Records" -> recordRepo.findById(id).ifPresent(x -> recordRepo.delete(x));
         }
 
         return ResponseEntity.ok().build();
