@@ -7,9 +7,7 @@ import ft.root.entity.Position;
 import ft.root.entity.Record;
 import ft.root.repository.*;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +69,49 @@ public class StructController {
         return infos;
     }
 
-    @GetMapping("/api/filter")
-    public List<CardPreviewInfo> getFiltered(@RequestParam Map<String, String> params) {
-        for (Map.Entry<String, String> pair : params.entrySet()) {
-            System.out.println("key: " + pair.getKey() + " | value" + pair.getValue());
+    @PostMapping("/api/filter")
+    public List<CardPreviewInfo> getFiltered(@RequestBody Map<String, String> params) {
+        Iterable<Record> records = recordRepo.findAll();
+        List<CardPreviewInfo> infos = new ArrayList<>();
+        for (Record r : records) {
+            boolean isValid = true;
+            for (Map.Entry<String, String> pair : params.entrySet()) {
+                switch (pair.getKey()) {
+                    case "entity" -> {
+                        if (r.getEntity() == null || !r.getEntity().getName().equals(pair.getValue())) isValid = false;
+                    }
+                    case "location" -> {
+                        if (r.getLocation() == null || !r.getLocation().getName().equals(pair.getValue()))
+                            isValid = false;
+                    }
+                    case "division" -> {
+                        if (r.getDivision() == null || !r.getDivision().getName().equals(pair.getValue()))
+                            isValid = false;
+                    }
+                    case "department" -> {
+                        if (r.getDepartmentGroup() == null || !r.getDepartmentGroup().getDepartment().getName().equals(pair.getValue()))
+                            isValid = false;
+                    }
+                    case "group" -> {
+                        if (r.getDepartmentGroup() == null || !r.getDepartmentGroup().getGroup().getName().equals(pair.getValue()))
+                            isValid = false;
+                    }
+                    case "position" -> {
+                        if (r.getPosition() == null || !r.getPosition().getName().equals(pair.getValue()))
+                            isValid = false;
+                    }
+                    case "fullName" -> {
+                        if (r.getEmployee() == null || !r.getEmployee().getFullName().equals(pair.getValue()))
+                            isValid = false;
+                    }
+                    case "type" -> {
+                        if (r.getPosition() == null || !r.getPosition().getType().getName().equals(pair.getValue()))
+                            isValid = false;
+                    }
+                }
+            }
+            if (isValid) infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));
         }
-        return new ArrayList<>();
+        return infos;
     }
 }
