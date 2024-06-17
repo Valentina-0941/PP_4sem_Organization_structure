@@ -4,10 +4,12 @@ import ft.root.entity.*;
 import ft.root.entity.Record;
 import ft.root.repository.*;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -72,5 +74,55 @@ public class AdminController {
     @GetMapping("/api/admin/getAllDepartmentsGroups")
     public List<DepartmentGroup> getDepartmentsGroups() {
         return (List<DepartmentGroup>) departmentGroupRepo.findAll();
+    }
+
+    @PostMapping("/api/admin/editLocation")
+    public ResponseEntity<Location> AddLocation(@RequestBody Location in) {
+        return new ResponseEntity<>(locationRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editEntity")
+    public ResponseEntity<Entity> AddEntity(@RequestBody Entity in) {
+        return new ResponseEntity<>(entityRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editPosition")
+    public ResponseEntity<Position> AddPosition(@RequestBody Position in) {
+        return new ResponseEntity<>(positionRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editPositionType")
+    public ResponseEntity<PositionType> AddPositionType(@RequestBody PositionType in) {
+        return new ResponseEntity<>(positionTypeRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editGroup")
+    public ResponseEntity<Group> AddGroup(@RequestBody Group in) {
+        return new ResponseEntity<>(groupRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editRecord")
+    public ResponseEntity<Record> AddRecord(@RequestBody Record in) {
+        return new ResponseEntity<>(recordRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editEmployee")
+    public ResponseEntity<Employee> AddEmployee(@RequestBody Employee in) {
+        return new ResponseEntity<>(employeeRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editDepartment")
+    public ResponseEntity<Department> AddDepartment(@RequestBody Department in) {
+        return new ResponseEntity<>(departmentRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editDivision")
+    public ResponseEntity<Division> AddDivision(@RequestBody Division in) {
+        return new ResponseEntity<>(divisionRepo.save(in), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/admin/editDepartmentGroup")
+    public ResponseEntity<DepartmentGroup> AddDepartmentGroup(@RequestBody DepartmentGroup in) {
+        return new ResponseEntity<>(departmentGroupRepo.save(in), HttpStatus.OK);
     }
 }
