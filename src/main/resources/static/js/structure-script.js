@@ -1,12 +1,9 @@
 document.addEventListener('DOMContentLoaded', async function () {
-    // const jsonFilePath = '/data.json'; // Путь к вашему JSON файлу
-
     const serverResponse = await fetch(`/api/getAllCardData`);
     const cardInfos = await serverResponse.json();
 
-    let isCategorized = false; // Флаг для отслеживания состояния категорий
     let sortingOrder = '';
-
+    let originalOrder = [];
 
     // Функция для создания карточки сотрудника
     function createEmployeeCard(record) {
@@ -19,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         var fullName = record.employee == null ? "Вакансия" :
             record.employee.firstName + " " + record.employee.lastName + " " + record.employee.patronymic;
         card.innerHTML = `
-<!--            <div class="card-img-top img-fluid" style="background: url(source/img/no_photo.jpg) center; background-size: cover; width:150px; height: 180px;"></div>-->
             <div class="card-body text-center">
                 <h6 class="card-title">${fullName}</h6>
                 <div class="card-text">
@@ -30,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         return card;
     }
 
-    // Функция для обработки данных и создания карточек
+    // Функция для обработки данных и создания карточекэ
     function processEmployeeData(cardInfos) {
         const cardsContainer = document.querySelector('#employeeCards');
         cardsContainer.innerHTML = '';
@@ -40,225 +36,255 @@ document.addEventListener('DOMContentLoaded', async function () {
         cardsContainer.appendChild(uncategorizedContainer);
 
         cardInfos.forEach(record => {
-            const card = createEmployeeCard(record);
-            uncategorizedContainer.appendChild(card);
+            uncategorizedContainer.appendChild(createEmployeeCard(record));
         });
+
+        // Сохраняем исходный порядок карточек
+        originalOrder = Array.from(uncategorizedContainer.children);
     }
 
-    // Функция для передачи данных в Offcanvas
+    // Функция для обновления контента Offcanvas
     function updateOffcanvasContent(data) {
         const offcanvasContent = document.getElementById('offcanvasContent');
-        offcanvasContent.textContent = data;
+        offcanvasContent.innerHTML = `
+            <h4>${data.fullName}</h4>
+            <p>${data.position}</p>
+            <hr>
+            <p>Юр.лица: ${data.entity}</p>
+            <p>Локация: ${data.location}</p>
+            <p>Подразделение: ${data.division}</p>
+            <p>Отдел: ${data.department}</p>
+            <p>Группа: ${data.group}</p>
+            <p>Тип работы: ${data.type}</p>
+            <p>Номер позиции: ${data.number}</p>
+        `;
     }
+
+    // Обработчик клика на кнопку "Вывести свободные должности"
+    const showVacantPositionsBtn = document.querySelector('.show-vacant-positions');
+    showVacantPositionsBtn.addEventListener('click', async function () {
+        console.log("Вывести свободные должности");
+        var freeJobResp = await fetch('/api/getAllFree');
+        var freeJob = await freeJobResp.json();
+        console.log(freeJob);
+
+        processEmployeeData(freeJob);
+    });
 
     // Передача данных при открытии Offcanvas
     const offcanvasElement = document.getElementById('offcanvasExample');
-    offcanvasElement.addEventListener('show.bs.offcanvas', function (event) {
-        console.log(offcanvasElement);
-        updateOffcanvasContent();
+    offcanvasElement.addEventListener('show.bs.offcanvas', async function (event) {
+        const resp = await fetch('/api/getAllInfo?id=' + event.relatedTarget.getAttribute('id-card'));
+        const data = await resp.json();
+        updateOffcanvasContent(data);
     });
 
-    // Загружаем данные о сотрудниках из json файла и создаем карточки
+    // Функция для сортировки карточек
+    function sortCards(order) {
+        const cardsContainer = document.querySelector('.cards');
+        let sortedCards = Array.from(cardsContainer.children);
+
+        if (order === 'asc') {
+            sortedCards.sort((a, b) => {
+                const textA = a.querySelector(".card-title").innerText.toLowerCase();
+                const textB = b.querySelector(".card-title").innerText.toLowerCase();
+                return textA.localeCompare(textB);
+            });
+        } else if (order === 'desc') {
+            sortedCards.sort((a, b) => {
+                const textA = a.querySelector(".card-title").innerText.toLowerCase();
+                const textB = b.querySelector(".card-title").innerText.toLowerCase();
+                return textB.localeCompare(textA);
+            });
+        } else {
+            sortedCards = originalOrder;
+        }
+
+        cardsContainer.innerHTML = '';
+        sortedCards.forEach(card => cardsContainer.appendChild(card));
+    }
+
+    // Обработчик клика на кнопку "Сортировка"
+    const sortAlphabeticallyBtn = document.querySelector('.sort');
+    sortAlphabeticallyBtn.addEventListener('click', function () {
+        switch (sortingOrder) {
+            case 'asc':
+                sortingOrder = 'desc';
+                break;
+            case 'desc':
+                sortingOrder = '';
+                break;
+            default:
+                sortingOrder = 'asc';
+                break;
+        }
+
+        sortCards(sortingOrder);
+
+        // Обновляем текст кнопки
+        const sortButton = document.querySelector('.sort a');
+        switch (sortingOrder) {
+            case 'asc':
+                sortButton.textContent = 'Отсортировать от Я до А';
+                break;
+            case 'desc':
+                sortButton.textContent = 'Без сортировки';
+                break;
+            default:
+                sortButton.textContent = 'Отсортировать от А до Я';
+                break;
+        }
+    });
+
+    // Загружаем данные о сотрудниках и создаем карточки
     processEmployeeData(cardInfos);
+
+
+    var openModalBtn = document.getElementById('openModalBtn');
+    var searchModal = new bootstrap.Modal(document.getElementById('searchModal'));
+    var applyFilterBtn = document.querySelector('#applyFilterBtn');
+    var clearFilterBtn = document.querySelector('#clearFilterBtn');
+    var filterBox = document.querySelector('.filter-box');
+    var closeModalBtns = document.querySelectorAll('[data-bs-dismiss="modal"]');
+
+    // Открыть модальное окно при нажатии на кнопку
+    openModalBtn.addEventListener('click', function () {
+        searchModal.show();
+    });
+
+    // Применить фильтр
+    applyFilterBtn.addEventListener('click', async function () {
+        var inputNumberPos = document.getElementById('inputNumberPos').value.trim();
+        var inputYurFace = document.getElementById('inputYurFace').value.trim();
+        var inputLocation = document.getElementById('inputLocation').value.trim();
+        var inputSubdivision = document.getElementById('inputSubdivision').value.trim();
+        var inputDepartment = document.getElementById('inputDepartment').value.trim();
+        var inputGroup = document.getElementById('inputGroup').value.trim();
+        var inputJobTitle = document.getElementById('inputJobTitle').value.trim();
+        var inputName = document.getElementById('inputName').value.trim().toLowerCase();
+        var inputJobType = document.getElementById('inputJobType').value.trim();
+
+        filterBox.innerHTML = ''; // Очищаем содержимое filter-box перед добавлением новых элементов
+
+        if (inputNumberPos !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputNumberPos')">Номер позиции: ${inputNumberPos}</span>
+            </div>`;
+        }
+        if (inputYurFace !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputYurFace')">Юр. лицо: ${inputYurFace}</span>
+            </div>`;
+        }
+        if (inputLocation !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputLocation')">Локация: ${inputLocation}</span>
+            </div>`;
+        }
+        if (inputSubdivision !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputSubdivision')">Подразделение: ${inputSubdivision}</span>
+            </div>`;
+        }
+        if (inputDepartment !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputDepartment')">Отдел: ${inputDepartment}</span>
+            </div>`;
+        }
+        if (inputGroup !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputGroup')">Группа: ${inputGroup}</span>
+            </div>`;
+        }
+        if (inputJobTitle !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputJobTitle')">Должность: ${inputJobTitle}</span>
+            </div>`;
+        }
+        if (inputName !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputName')">ФИО: ${inputName}</span>
+            </div>`;
+        }
+        if (inputJobType !== '') {
+            filterBox.innerHTML += `<div class="btn btn-light py-1 px-3" style="border-radius: 16px;">
+                <span onclick="removeFilterItem(this, 'inputJobType')">Тип работы: ${inputJobType}</span>
+            </div>`;
+        }
+
+        // Применяем фильтрацию карточек
+
+        const dict = {};
+        if (inputNumberPos !== '') {
+            dict['number'] = inputNumberPos;
+        }
+        if (inputYurFace !== '') {
+            dict['entity'] = inputYurFace;
+        }
+        if (inputLocation !== '') {
+            dict['location'] = inputLocation;
+        }
+        if (inputSubdivision !== '') {''
+            dict['division'] = inputSubdivision;
+        }
+        if (inputDepartment !== '') {
+            dict['department'] = inputDepartment;
+        }
+        if (inputGroup !== '') {
+            dict['group'] = inputGroup;
+        }
+        if (inputJobTitle !== '') {
+            dict['position'] = inputJobTitle;
+        }
+        if (inputName !== '') {
+            dict['fullName'] = inputName;
+        }
+        if (inputJobType !== '') {
+            dict['type'] = inputJobType;
+        }
+
+        const temp1 = await fetch('/api/filter?params=',{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dict),
+        });
+        const temp2 = await temp1.json();
+        console.log(temp2);
+        processEmployeeData(temp2);
+
+        // Закрываем модальное окно после применения фильтра
+        searchModal.hide();
+    });
+
+    // Сбросить фильтр
+    clearFilterBtn.addEventListener('click', function () {
+        var filterInputs = document.querySelectorAll('.form-control');
+        filterInputs.forEach(function (input) {
+            input.value = '';
+        });
+
+        var cards = document.querySelectorAll('.card');
+        cards.forEach(function (card) {
+            card.style.display = 'block';
+        });
+        filterBox.innerHTML = ''; // Очищаем содержимое filter-box
+    });
+
+    // Удалить элемент в filter-box
+    window.removeFilterItem = function (element, inputId) {
+        element.parentNode.remove();
+        document.getElementById(inputId).value = '';
+
+        // После удаления элемента из filter-box, вызываем функцию, обновляющую фильтр
+        applyFilterBtn.click();
+    };
+
+    // Закрыть модальное окно
+    closeModalBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            searchModal.hide();
+        });
+    });
 });
-
-
-// // Функция для создания заголовка категории
-// function createCategoryHeader(categoryName, collapseId, level) {
-//     const header = document.createElement('div');
-//     header.innerHTML = `
-//         <p>
-//             <a class="btn btn-light w-100 dropdown-toggle text-start category-level-${level}" data-bs-toggle="collapse" href="#${collapseId}" role="button" aria-expanded="false" aria-controls="${collapseId}">
-//                 ${categoryName}
-//             </a>
-//         </p>
-//         <div class="collapse" id="${collapseId}"></div>
-//     `;
-//     return header;
-// }
-
-
-//
-//     // Функция для блокировки/разблокировки кнопок
-//     function toggleButtons(isDisabled) {
-//         const buttons = document.querySelectorAll('.my-3 .btn:not(.divide_into_categories)');
-//         buttons.forEach(button => {
-//             button.disabled = isDisabled;
-//             if (isDisabled) {
-//                 button.classList.add('disabled'); // Добавляем стиль для выделения блокированных кнопок
-//             } else {
-//                 button.classList.remove('disabled');
-//             }
-//         });
-//     }
-//
-//     function sortEmployeesAlphabetically(data, order) {
-//         if (!data || !Array.isArray(data)) return [];
-//
-//         const sortedData = data.map(yurFace => {
-//             yurFace.children = yurFace.children.map(location => {
-//                 location.children = location.children.map(subdivision => {
-//                     subdivision.children = subdivision.children.map(department => {
-//                         department.children = department.children.map(group => {
-//                             group.children.sort((a, b) => {
-//                                 if (order === 'asc') {
-//                                     return a.children[0].fio.localeCompare(b.children[0].fio);
-//                                 } else if (order === 'desc') {
-//                                     return b.children[0].fio.localeCompare(a.children[0].fio);
-//                                 }
-//                             });
-//                             return group;
-//                         });
-//
-//                         if (order === 'asc') {
-//                             department.children.sort((a, b) => a.name.localeCompare(b.name));
-//                         } else if (order === 'desc') {
-//                             department.children.sort((a, b) => b.name.localeCompare(a.name));
-//                         }
-//                         return department;
-//                     });
-//
-//                     if (order === 'asc') {
-//                         subdivision.children.sort((a, b) => a.name.localeCompare(b.name));
-//                     } else if (order === 'desc') {
-//                         subdivision.children.sort((a, b) => b.name.localeCompare(a.name));
-//                     }
-//                     return subdivision;
-//                 });
-//
-//                 if (order === 'asc') {
-//                     location.children.sort((a, b) => a.name.localeCompare(b.name));
-//                 } else if (order === 'desc') {
-//                     location.children.sort((a, b) => b.name.localeCompare(a.name));
-//                 }
-//                 return location;
-//             });
-//
-//             if (order === 'asc') {
-//                 yurFace.children.sort((a, b) => a.name.localeCompare(b.name));
-//             } else if (order === 'desc') {
-//                 yurFace.children.sort((a, b) => b.name.localeCompare(a.name));
-//             }
-//             return yurFace;
-//         });
-//
-//         if (order === 'asc') {
-//             sortedData.sort((a, b) => a.name.localeCompare(b.name));
-//         } else if (order === 'desc') {
-//             sortedData.sort((a, b) => b.name.localeCompare(a.name));
-//         }
-//
-//         return sortedData;
-//     }
-//
-//
-//     // Функция для обновления текста и иконки кнопки "По алфавиту"
-//     function updateSortButtonUI() {
-//         const sortButton = document.querySelector('.sort');
-//
-//         switch (sortingOrder) {
-//             case 'asc':
-//                 sortButton.innerHTML = `
-//                     <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">
-//                         Сортировка от А до Я
-//                     </a>
-//                 `;
-//                 break;
-//             case 'desc':
-//                 sortButton.innerHTML = `
-//                     <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">
-//                         Сортировка от Я до А
-//                     </a>
-//                 `;
-//                 break;
-//             default:
-//                 sortButton.innerHTML = `
-//                     <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">
-//                         Без сортировки
-//                     </a>
-//                 `;
-//                 break;
-//         }
-//     }
-//
-//
-//     // Обработчик клика на кнопку "Разделить на категории"
-//     const divideIntoCategoriesBtn = document.querySelector('.divide_into_categories');
-//     divideIntoCategoriesBtn.addEventListener('click', function () {
-//         isCategorized = !isCategorized; // Меняем состояние
-//
-//         // Блокировка/разблокировка других кнопок
-//         toggleButtons(isCategorized);
-//
-//         // Изменение стиля нажатой кнопки (необязательно, пример)
-//         if (isCategorized) {
-//             divideIntoCategoriesBtn.classList.add('btn-primary'); // Пример класса для нажатой кнопки, можно адаптировать под ваш стиль
-//         } else {
-//             divideIntoCategoriesBtn.classList.remove('btn-primary');
-//         }
-//
-//         fetch(jsonFilePath)
-//             .then(response => {
-//                 if (!response.ok) {
-//                     throw new Error('Ошибка при загрузке данных о сотрудниках');
-//                 }
-//                 return response.json();
-//             })
-//             .then(data => {
-//                 processEmployeeData(data, isCategorized);
-//             })
-//             .catch(error => {
-//                 console.error('Ошибка при загрузке данных о сотрудниках:', error);
-//             });
-//     });
-//
-//     // Обработчик клика на кнопку "Вывести свободные должности"
-//     const showVacantPositionsBtn = document.querySelector('.show-vacant-positions');
-//     showVacantPositionsBtn.addEventListener('click', function () {
-//         console.log("Вывести свободные должности");
-//         // Здесь может быть ваша логика для кнопки "Вывести свободные должности"
-//     });
-//
-//     // Обработчик клика на кнопку "Сортировка"
-//     const sortAlphabeticallyBtn = document.querySelector('.sort');
-//     sortAlphabeticallyBtn.addEventListener('click', function () {
-//         switch (sortingOrder) {
-//             case 'asc':
-//                 sortingOrder = 'desc';
-//                 break;
-//             case 'desc':
-//                 sortingOrder = '';
-//                 break;
-//             default:
-//                 sortingOrder = 'asc';
-//                 break;
-//         }
-//
-//         updateSortButtonUI(); // Обновляем текст кнопки
-//
-//         // Повторно обрабатываем данные с учетом нового порядка сортировки
-//         fetch(jsonFilePath)
-//             .then(response => {
-//                 if (!response.ok) {
-//                     throw new Error('Ошибка при загрузке данных о сотрудниках');
-//                 }
-//                 return response.json();
-//             })
-//             .then(data => {
-//                 const sortedData = sortEmployeesAlphabetically(data.children);
-//                 processEmployeeData({children: sortedData}, isCategorized);
-//             })
-//             .catch(error => {
-//                 console.error('Ошибка при загрузке данных о сотрудниках:', error);
-//             });
-//     });
-//
-//
-//     // Обработчик клика на кнопку "Поиск"
-//     const abcd = document.querySelector('.show-vacant-positions');
-//     showVacantPositionsBtn.addEventListener('click', function () {
-//         console.log("Вывести свободные должности");
-//         // Здесь может быть ваша логика для кнопки "Поиск"
-//     });
-//
-// });

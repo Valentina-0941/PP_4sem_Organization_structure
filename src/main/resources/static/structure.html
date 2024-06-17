@@ -119,14 +119,11 @@
     <div class="w-100">
         <!--Сортировка по алфавиту-->
         <div class="my-3 mx-4">
-            <div class="btn btn-light px-4 divide_into_categories" style="border-radius: 16px;">
-                <a class="icon-link icon-link-hover link-underline  link-underline-opacity-0" href="#">Разделить на категории</a>
-            </div>
             <div class="btn btn-light px-4 show-vacant-positions" style="border-radius: 16px;">
                 <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Вывести свободные должности</a>
             </div>
             <div class="sort btn btn-light px-4 sort" style="border-radius: 16px;">
-                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Сортировка</a>
+                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" id='sortButton' href="#">Отсортировать от А до Я</a>
             </div>
             <div class="btn btn-light search" style="border-radius: 16px;">
                 <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#" id="openModalBtn">
@@ -136,7 +133,7 @@
         </div>
         <!--Поиск-->
         <div class="filter-box d-flex gap-3 my-4 mx-4"></div>
-        <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards"></div>
+        <div class="my-4 mx-4" id="employeeCards"></div>
     </div>
 
     <!--Информация о сотруднике -->
@@ -145,8 +142,7 @@
             <h5 class="offcanvas-title" id="offcanvasExampleLabel">Информация о сотруднике</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
-            <p id="offcanvasContent">Содержимое Offcanvas</p>
+        <div class="offcanvas-body" id="offcanvasContent">
         </div>
     </div>
 
@@ -205,7 +201,6 @@
             </div>
         </div>
     </div>
-    <script src="js/search.js"></script>
 </div>
 </body>
 </html>

@@ -13,6 +13,12 @@ document.addEventListener("DOMContentLoaded", function () {
             imgAlt: "stats icon"
         },
         {
+            href: "structure-categorize.html",
+            tooltip: "Структура организации по категориям",
+            imgSrc: "source/icon/fi-rr-id-card-clip-alt.svg",
+            imgAlt: "stats icon"
+        },
+        {
             href: "structure-graph.html",
             tooltip: "Силовой граф",
             imgSrc: "source/icon/fi-rr-department-structure.svg",

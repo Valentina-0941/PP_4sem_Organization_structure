@@ -1,10 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <title>Разделение на категории</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Структура организации разделенная на категории</title>
+
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="js/navigation.js"></script>
+
+    <style>
+
+        .icon {
+            width: 24px;
+        }
+
+    </style>
 </head>
 <body>
+<div class="d-flex">
+    <!--Боковая панель навигации-->
+    <header class="">
+        <div class="d-flex flex-column flex-shrink-0 bg-body-tertiary position-fixed" style="height: 100vh;">
+            <ul class="nav nav-pills nav-flush flex-column text-center mb-auto" id="navigation"></ul>
+            <div class="dropdown border-top">
+                <a href="#"
+                   class="d-flex align-items-center justify-content-center py-3 link-body-emphasis text-decoration-none dropdown-toggle"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="" alt="" width="24" height="24" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small shadow">
+                    <li><a class="dropdown-item" href="account.html">Профиль</a></li>
+                    <li><a class="dropdown-item" href="settings.html">Настройки</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
 
+    <div class="w-100">
+        <!--Сортировка по алфавиту-->
+        <div class="my-3 mx-4">
+            <div class="btn btn-light px-4 show-vacant-positions" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Вывести свободные должности</a>
+            </div>
+            <div class="sort btn btn-light px-4 sort" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#">Сортировка</a>
+            </div>
+            <div class="btn btn-light search" style="border-radius: 16px;">
+                <a class="icon-link icon-link-hover link-underline link-underline-opacity-0" href="#" id="openModalBtn">
+                    <img src="source/icon/fi-rr-search.svg" alt="Поиск" style="width: 16px;">
+                </a>
+            </div>
+        </div>
+        <!--Поиск-->
+        <div class="filter-box d-flex gap-3 my-4 mx-4"></div>
+        <div class="cards d-flex row gap-3 my-4 mx-4" id="employeeCards"></div>
+    </div>
+
+    <!--Информация о сотруднике -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Информация о сотруднике</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" id="offcanvasContent">
+        </div>
+    </div>
+
+    <!-- Модальное окно для поиска -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Поиск</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="row row-cols-3" id="Search">
+                        <div class="col">
+                            <label for="inputNumberPos" class="form-label">Номер позиции</label>
+                            <input type="text" class="form-control" id="inputNumberPos">
+                        </div>
+                        <div class="col">
+                            <label for="inputYurFace" class="form-label">Юр. лицо</label>
+                            <input type="text" class="form-control" id="inputYurFace">
+                        </div>
+                        <div class="col">
+                            <label for="inputLocation" class="form-label">Локация</label>
+                            <input type="text" class="form-control" id="inputLocation">
+                        </div>
+                        <div class="col">
+                            <label for="inputSubdivision" class="form-label">Подразделение</label>
+                            <input type="text" class="form-control" id="inputSubdivision">
+                        </div>
+                        <div class="col">
+                            <label for="inputDepartment" class="form-label">Отдел</label>
+                            <input type="text" class="form-control" id="inputDepartment">
+                        </div>
+                        <div class="col">
+                            <label for="inputGroup" class="form-label">Группа</label>
+                            <input type="text" class="form-control" id="inputGroup">
+                        </div>
+                        <div class="col">
+                            <label for="inputJobTitle" class="form-label">Должность</label>
+                            <input type="text" class="form-control" id="inputJobTitle">
+                        </div>
+                        <div class="col">
+                            <label for="inputName" class="form-label">ФИО</label>
+                            <input type="text" class="form-control" id="inputName">
+                        </div>
+                        <div class="col">
+                            <label for="inputJobType" class="form-label">Тип работы</label>
+                            <input type="text" class="form-control" id="inputJobType">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" id="applyFilterBtn" class="btn btn-primary">Применить фильтр</button>
+                    <button type="button" id="clearFilterBtn" class="btn btn-secondary">Сбросить фильтр</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/search.js"></script>
+</div>
 </body>
 </html>
