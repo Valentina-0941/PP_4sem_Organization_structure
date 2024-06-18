@@ -3,12 +3,16 @@ package ft.root.controllers;
 import ft.root.dto.CardPreviewInfo;
 import ft.root.entity.DepartmentGroup;
 import ft.root.entity.Record;
+import ft.root.logic.Tree;
 import ft.root.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,30 +31,33 @@ public class GraphController {
     private DepartmentGroupRepository departmentGroupRepo;
 
     @GetMapping("/api/hierarchy")
-    public List<CardPreviewInfo> getAllCardData(@RequestParam(value = "base") String base) {
-        List<CardPreviewInfo> infos = new ArrayList<>();
-//        for (Record r : recordRepo.findAll())
-//            infos.add(new CardPreviewInfo(r.getId(), r.getEmployee(), r.getPosition()));
-        buildEntityBased();
-        return infos;
+    public String getAllCardData(@RequestParam("base") String base) {
+        int b = switch (base) {
+            case "location" -> 1;
+            case "subdivision" -> 2;
+            case "department" -> 3;
+            case "group" -> 4;
+            case "position" -> 5;
+            default -> 0;
+        };
+        return buildEntityBased(b);
     }
 
-    /*
-    Division
-    Entity
-    Location
-    Department
-    Group
-    Position
-    Employee
-    PositionType
-    PosNumber
-     */
+    private String buildEntityBased(int base) {
+        System.out.println("L1");
 
-    private void buildEntityBased() {
         ArrayList<String[]> data = new ArrayList<>();
-        for (Record r : recordRepo.findAll()) {
-            data.add(refactorRecord(r));
+        for (Record r : recordRepo.findAll()) data.add(shift(refactorRecord(r), base));
+
+        Tree root = new Tree();
+
+        for (String[] array : data) {
+            root.add(array);
+        }
+        try {
+            return root.toJson();
+        } catch (Exception e) {
+            return "";
         }
     }
 
@@ -62,6 +69,7 @@ public class GraphController {
             strDepartment = dg.getDepartment().getName();
             strGroup = dg.getGroup().getName();
         }
+        String fio = r.getEmployee() == null ? "Вакансия" : r.getEmployee().getFullName();
         return new String[]{
                 r.getEntity() == null ? "n/a" : r.getEntity().getName(),
                 r.getLocation() == null ? "n/a" : r.getLocation().getName(),
@@ -69,23 +77,19 @@ public class GraphController {
                 strDepartment,
                 strGroup,
                 r.getPosition() == null ? "n/a" : r.getPosition().getName(),
-                r.getEmployee().getFullName(),
+                fio,
                 r.getPosition().getType().getName(),
                 r.getId(),
         };
     }
+
+    private String[] shift(String[] array, int x) {
+        String buffer;
+        for (int i = x; i > 0; i--) {
+            buffer = array[i];
+            array[i] = array[i - 1];
+            array[i - 1] = buffer;
+        }
+        return array;
+    }
 }
-/*
-            DepartmentGroup dg = record.getDepartmentGroup();
-            Department department = dg.getDepartment();
-            Group group = dg.getGroup();
-            Position position = record.getPosition();
-
-
-            HashMap<String, String> endValues = new HashMap<>() {{
-                put("fio", record.getEmployee().getFullName());
-                put("job_type", position.getType().getName());
-                put("pos_number", record.getId());
-            }};
-            HNode end = new HNode(endValues, null);
- */
