@@ -1,5 +1,4 @@
 const dataUrl = 'data.json';
-// const dataUrl = 'data.json';
 
 d3.json(dataUrl).then(data => {
     var element = document.getElementById("chart");
@@ -17,12 +16,13 @@ d3.json(dataUrl).then(data => {
     let nodes = hierarchy.descendants().filter(d => d.depth <= 2);
     let links = hierarchy.links().filter(d => d.source.depth <= 2 && d.target.depth <= 2);
 
-    const svg = d3.select("#chart").append("svg")
+    let svg = d3.select("#chart").select("svg");
+    svg.selectAll("*").remove(); // Очищаем старый график перед построением нового
+    svg = d3.select("#chart").append("svg")
         .attr("viewBox", [0, 0, width, height])
         .call(d3.zoom().on("zoom", (event) => {
             g.attr("transform", event.transform);
         }));
-
     const g = svg.append("g");
     const tooltip = d3.select("#tooltip");
 
@@ -111,8 +111,8 @@ d3.json(dataUrl).then(data => {
     function getChildrenInfo(d) {
         if (!d.children) {
             return `<strong>${d.data.name}</strong><br>
-                        <p>ФИО:</p> ${d.data.fio}<br>
-                        <p>Номер позиции:</p> ${d.data.pos_number}<br>`;
+                    <p>ФИО:</p> ${d.data.fio}<br>
+                    <p>Номер позиции:</p> ${d.data.pos_number}<br>`;
         }
         let info = `<strong>${d.data.name}:</strong><br>`;
         d.children.forEach(child => {
@@ -165,7 +165,7 @@ d3.json(dataUrl).then(data => {
         simulation.alpha(1).restart();
     }
 
-    // Show All Elements Button Event Listener
+// Show All Elements Button Event Listener
     document.getElementById("showAllButton").addEventListener("click", function () {
         var alertModal = new bootstrap.Modal(document.getElementById('alertModal'), {
             keyboard: false
@@ -173,7 +173,7 @@ d3.json(dataUrl).then(data => {
         alertModal.show();
     });
 
-    // Confirm Show All Elements
+// Confirm Show All Elements
     document.getElementById('confirmShowAll').addEventListener('click', function () {
         var alertModal = bootstrap.Modal.getInstance(document.getElementById('alertModal'));
         alertModal.hide();
@@ -198,14 +198,10 @@ d3.json(dataUrl).then(data => {
         console.log(data);
         const newHierarchy = d3.hierarchy(data);
         newHierarchy.each(d => d.data.expanded = false);
-        nodes = '';
-        links = '';
         nodes = newHierarchy.descendants().filter(d => d.depth <= 3);
         links = newHierarchy.links().filter(d => d.source.depth <= 3 && d.target.depth <= 3);
-
         update();
     }
-
 
 }).catch(error => {
     console.error('Error loading the JSON data:', error);
